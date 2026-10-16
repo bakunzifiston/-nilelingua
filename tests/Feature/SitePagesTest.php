@@ -50,6 +50,55 @@ class SitePagesTest extends TestCase
         $this->get('/not-a-page')->assertNotFound();
     }
 
+    public function test_services_overview_displays_approved_content_and_metadata(): void
+    {
+        $this->get('/services')
+            ->assertOk()
+            ->assertSee('<title>Language Services in East Africa | Nile Lingua Lab</title>', false)
+            ->assertSee('Enterprise-Grade African Language Solutions Built for Global Impact')
+            ->assertSee('language services East Africa')
+            ->assertSee('Our Four Core Service Pillars')
+            ->assertSee('Human-in-the-loop (HITL) evaluation')
+            ->assertSee('How We Work')
+            ->assertSee('Independent editing')
+            ->assertSee('Kinyarwanda, Kirundi, Swahili, Luganda, Runyankore-Rukiga')
+            ->assertSee('Academic research')
+            ->assertSee('Book a Consultation')
+            ->assertSee('Contact Our Team')
+            ->assertSee('/services/localization')
+            ->assertSee('/services/legal-technical-translation')
+            ->assertSee('/services/subtitling')
+            ->assertSee('/services/ai-language-data-mtpe');
+    }
+
+    public function test_localization_service_displays_approved_content_and_metadata(): void
+    {
+        $this->get('/services/localization')
+            ->assertOk()
+            ->assertSee('<title>Localization Services for African Languages | NLL</title>', false)
+            ->assertSee('name="keywords" content="localization services for African languages"', false)
+            ->assertSee('Localization Services for African Languages')
+            ->assertSee('High-Impact Digital Adaptation for East &amp; Central African Markets', false)
+            ->assertSee('Core Localization Capabilities')
+            ->assertSee('NGO &amp; Community Outreach Adaptation', false)
+            ->assertSee('How We Localize')
+            ->assertSee('File and layout checks')
+            ->assertSee('Runyankore-Rukiga')
+            ->assertSee('Source languages:')
+            ->assertSee('Trados Studio')
+            ->assertSee('Wordfast Pro')
+            ->assertSee('MultiTerm')
+            ->assertSee('XLIFF')
+            ->assertSee('WhatsApp +250 788 750 971')
+            ->assertSee('href="https://wa.me/250788750971"', false)
+            ->assertSee('Technology &amp; digital platforms', false);
+
+        $this->get('/services/subtitling')
+            ->assertOk()
+            ->assertDontSee('Localization Services for African Languages')
+            ->assertSee('Keep every voice in the conversation.');
+    }
+
     public function test_contact_form_saves_a_valid_enquiry_and_shows_thank_you(): void
     {
         $response = $this->post('/contact', [

@@ -76,8 +76,51 @@
         <div class="home-service-grid">
             @foreach ($services as $service)
                 <article class="home-service-card {{ !empty($service['deliverables']) ? 'home-service-card-detailed' : '' }}">
-                    <span class="home-card-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} <span>/</span> {{ str_pad(count($services), 2, '0', STR_PAD_LEFT) }}</span>
-                    <span class="home-service-icon" aria-hidden="true">{{ $service['icon'] }}</span>
+                    <div class="home-service-card-top">
+                        <span class="home-card-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }} <span>/</span> {{ str_pad(count($services), 2, '0', STR_PAD_LEFT) }}</span>
+                    </div>
+                    <div class="home-service-illustration" aria-hidden="true">
+                        <svg viewBox="0 0 320 120" fill="none" preserveAspectRatio="xMidYMid meet">
+                            @switch($loop->iteration)
+                                @case(1)
+                                    <circle class="illustration-wash" cx="161" cy="60" r="46"/>
+                                    <path class="illustration-line" d="M132 61c0-16 13-29 29-29s29 13 29 29-13 29-29 29-29-13-29-29Z"/>
+                                    <path class="illustration-line" d="M132 52h58M132 70h58M161 32c-8 8-12 18-12 29s4 21 12 29c8-8 12-18 12-29s-4-21-12-29Z"/>
+                                    <rect class="illustration-tag" x="69" y="35" width="49" height="23" rx="11.5"/>
+                                    <path class="illustration-line" d="M81 47h24"/>
+                                    <rect class="illustration-tag" x="203" y="64" width="48" height="23" rx="11.5"/>
+                                    <path class="illustration-line" d="M214 76h25"/>
+                                    <circle class="illustration-dot" cx="104" cy="83" r="4"/>
+                                    <circle class="illustration-dot" cx="215" cy="36" r="4"/>
+                                    @break
+                                @case(2)
+                                    <rect class="illustration-wash" x="99" y="17" width="92" height="88" rx="8"/>
+                                    <path class="illustration-paper" d="M130 28h36l17 17v48h-53V28Z"/>
+                                    <path class="illustration-line" d="M165 29v18h17M140 59h31M140 68h31M140 77h19"/>
+                                    <circle class="illustration-accent-wash" cx="196" cy="78" r="18"/>
+                                    <path class="illustration-accent-line" d="m188 78 5 5 10-11"/>
+                                    <path class="illustration-accent-line" d="M106 43h11M106 50h16M202 33h12"/>
+                                    <circle class="illustration-dot" cx="110" cy="75" r="4"/>
+                                    @break
+                                @case(3)
+                                    <rect class="illustration-wash" x="93" y="18" width="134" height="84" rx="8"/>
+                                    <rect class="illustration-paper" x="111" y="30" width="98" height="60" rx="5"/>
+                                    <path class="illustration-line" d="m151 47 21 13-21 13V47Z"/>
+                                    <path class="illustration-accent-line" d="M119 80h11m5-5v10m6-13v16m6-8v8m6-13v13m6-10v10"/>
+                                    <path class="illustration-line" d="M184 79h15"/>
+                                    <circle class="illustration-dot" cx="108" cy="28" r="4"/>
+                                    <circle class="illustration-dot" cx="211" cy="95" r="4"/>
+                                    @break
+                                @default
+                                    <circle class="illustration-wash" cx="160" cy="60" r="45"/>
+                                    <path class="illustration-line" d="M128 61h12l8-20 13 39 13-44 11 33 8-16 7 8h14"/>
+                                    <circle class="illustration-dot" cx="112" cy="38" r="4"/>
+                                    <circle class="illustration-dot" cx="211" cy="61" r="4"/>
+                                    <circle class="illustration-dot" cx="160" cy="17" r="4"/>
+                                    <path class="illustration-line" d="M112 38 137 26l23-9m51 44 19-19m-72-30v13"/>
+                            @endswitch
+                        </svg>
+                    </div>
                     <h3 class="home-service-title">{{ $service['title'] }}</h3>
                     <p class="home-service-copy">{{ $service['body'] }}</p>
 

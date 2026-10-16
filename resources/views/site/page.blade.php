@@ -1,7 +1,20 @@
 @extends('layouts.site')
 
+@if ($kind === 'services')
+    @section('seo-title', $page['seo_title'])
+@elseif ($kind === 'service' && !empty($page['seo_title']))
+    @section('seo-title', $page['seo_title'])
+@endif
+
+@if ($kind === 'service' && !empty($page['localization_layout']))
+    @section('body-class', 'localization-page')
+    @section('page-styles')
+        <link rel="stylesheet" href="{{ asset('css/localization.css') }}">
+    @endsection
+@endif
+
 @section('content')
-    <section class="page-hero {{ $kind === 'article' ? 'article-hero' : '' }}">
+    <section class="page-hero {{ $kind === 'article' ? 'article-hero' : '' }} {{ $kind === 'services' ? 'services-overview-hero' : '' }} {{ $kind === 'service' && !empty($page['localization_layout']) ? 'localization-hero' : '' }}">
         <div class="wrap page-hero-inner">
             <div class="breadcrumbs">
                 <a href="/">Home</a><span aria-hidden="true">/</span>
@@ -14,17 +27,197 @@
             </div>
             <span class="eyebrow"><span class="eyebrow-dot"></span>{{ $page['eyebrow'] ?? ($page['category'] ?? 'Nilelingua') }}</span>
             <h1>{{ $page['headline'] ?? $page['title'] }}</h1>
-            <p class="page-lead">{{ $page['intro'] }}</p>
+            @if ($kind === 'service' && !empty($page['localization_layout']))
+                <h2 class="localization-hero-subtitle">{{ $page['intro'] }}</h2>
+                <p class="page-lead localization-hero-copy">{{ $page['hero_copy'] }}</p>
+            @else
+                <p class="page-lead">{{ $page['intro'] }}</p>
+            @endif
             @if ($kind === 'article')
                 <div class="article-meta"><span>{{ $page['category'] }}</span><span class="meta-separator">·</span><span>{{ $page['read_time'] }}</span></div>
+            @elseif ($kind === 'services')
+                <p class="services-overview-supporting">{{ $page['supporting_copy'] }}</p>
+                <div class="services-overview-actions">
+                    <a class="button button-quote" href="/contact">Request a Quote <span aria-hidden="true">↗</span></a>
+                    <a class="text-link" href="/contact">Book a Consultation <span aria-hidden="true">→</span></a>
+                </div>
             @elseif ($kind === 'service')
-                <a class="button button-quote" href="/contact">Request a quote <span aria-hidden="true">↗</span></a>
+                @if (!empty($page['localization_layout']))
+                    <div class="localization-actions">
+                        <a class="button button-quote" href="/contact">Request a Quote <span aria-hidden="true">↗</span></a>
+                        <a class="text-link" href="/contact">Book a Consultation <span aria-hidden="true">→</span></a>
+                    </div>
+                @else
+                    <a class="button button-quote" href="/contact">Request a quote <span aria-hidden="true">↗</span></a>
+                @endif
             @endif
         </div>
         <div class="page-hero-shape" aria-hidden="true"><span>n.</span></div>
     </section>
 
-    @if ($kind === 'contact')
+    @if ($kind === 'service' && !empty($page['localization_layout']))
+        <section class="localization-section wrap">
+            <div class="localization-section-heading">
+                <span class="eyebrow">Localization expertise</span>
+                <h2>Core Localization Capabilities</h2>
+            </div>
+            <div class="localization-capability-grid">
+                @foreach ($page['capabilities'] as $capability)
+                    <article class="localization-capability-card">
+                        <span class="localization-capability-index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                        <h3>{{ $capability['title'] }}</h3>
+                        <p>{{ $capability['body'] }}</p>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+
+        <section class="localization-work">
+            <div class="wrap">
+                <div class="localization-section-heading">
+                    <span class="eyebrow">A clear, careful process</span>
+                    <h2>How We Localize</h2>
+                </div>
+                <ol class="localization-workflow">
+                    @foreach ($page['workflow'] as $step)
+                        <li>
+                            <span>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <h3>{{ $step['title'] }}</h3>
+                            <p>{{ $step['body'] }}</p>
+                        </li>
+                    @endforeach
+                </ol>
+            </div>
+        </section>
+
+        <section class="localization-section wrap">
+            <div class="localization-section-heading">
+                <span class="eyebrow">Built around your markets and tools</span>
+                <h2>Languages We Localize Into</h2>
+            </div>
+            <div class="localization-language-panel">
+                <div>
+                    <h3>Supported languages</h3>
+                    <ul class="localization-language-list">
+                        @foreach ($page['languages'] as $language)
+                            <li>{{ $language }}</li>
+                        @endforeach
+                    </ul>
+                    <p>Need another language? <a href="/contact">Ask us</a>.</p>
+                    <p><strong>Source languages:</strong> {{ implode(' and ', $page['source_languages']) }}.</p>
+                    <a class="text-link" href="/languages">See all supported languages <span aria-hidden="true">↗</span></a>
+                </div>
+                <div class="localization-tools">
+                    <h3>Tools & File Formats</h3>
+                    <p>We work in {{ implode(', ', $page['tools']) }} for translation memory and terminology management, and handle the formats your developers already use:</p>
+                    <ul class="localization-format-list">
+                        @foreach ($page['formats'] as $format)
+                            <li>{{ $format }}</li>
+                        @endforeach
+                    </ul>
+                    <p>Using a different tool or platform? We can adapt to your workflow.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="localization-partner">
+            <div class="wrap localization-partner-inner">
+                <span class="eyebrow eyebrow-light">Start Your Localization Project</span>
+                <h2>Bring your product closer to its users.</h2>
+                <p>{{ $page['cta'] }}</p>
+                <div class="localization-actions">
+                    <a class="button button-light" href="/contact">Request a Quote <span aria-hidden="true">↗</span></a>
+                    <a class="text-link localization-whatsapp" href="https://wa.me/250788750971">WhatsApp +250 788 750 971 <span aria-hidden="true">↗</span></a>
+                </div>
+                <nav class="localization-related" aria-label="Related pages">
+                    <span>Related:</span>
+                    @foreach ($page['related_links'] as $link)
+                        <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+                    @endforeach
+                </nav>
+            </div>
+        </section>
+    @elseif ($kind === 'services')
+        <section class="services-overview-section wrap">
+            <div class="services-overview-heading">
+                <span class="eyebrow">Our Four Core Service Pillars</span>
+                <h2>Language solutions, built around your work.</h2>
+            </div>
+            <div class="services-overview-table-wrap">
+                <table class="services-overview-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Service pillar</th>
+                            <th scope="col">Key capabilities</th>
+                            <th scope="col">Core deliverables</th>
+                            <th scope="col">Typical clients</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($page['pillars'] as $pillar)
+                            <tr>
+                                <th scope="row"><a href="{{ $pillar['href'] }}">{{ $pillar['title'] }} <span aria-hidden="true">↗</span></a></th>
+                                <td data-label="Key capabilities">{{ $pillar['capabilities'] }}</td>
+                                <td data-label="Core deliverables">{{ $pillar['deliverables'] }}</td>
+                                <td data-label="Typical clients">{{ $pillar['clients'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="services-overview-work">
+            <div class="wrap">
+                <div class="services-overview-heading">
+                    <span class="eyebrow">A clear, careful process</span>
+                    <h2>How We Work</h2>
+                    <p>Every project follows the same four steps:</p>
+                </div>
+                <ol class="services-workflow">
+                    @foreach ($page['workflow'] as $step)
+                        <li>
+                            <span class="services-workflow-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                            <h3>{{ $step['title'] }}</h3>
+                            <p>{{ $step['body'] }}</p>
+                        </li>
+                    @endforeach
+                </ol>
+            </div>
+        </section>
+
+        <section class="services-overview-section wrap">
+            <div class="services-overview-heading">
+                <span class="eyebrow">Across East Africa and beyond</span>
+                <h2>Languages and Industries</h2>
+            </div>
+            <div class="services-context-grid">
+                <article class="services-context-card">
+                    <h3>Languages</h3>
+                    <p>{{ implode(', ', $page['languages']) }}.</p>
+                    <a class="text-link" href="/languages">See all languages <span aria-hidden="true">↗</span></a>
+                </article>
+                <article class="services-context-card">
+                    <h3>Sectors</h3>
+                    <p>{{ implode(', ', $page['industries']) }}.</p>
+                    <a class="text-link" href="/industries">Explore industries <span aria-hidden="true">↗</span></a>
+                </article>
+            </div>
+        </section>
+
+        <section class="services-overview-partner">
+            <div class="wrap services-overview-partner-inner">
+                <span class="eyebrow eyebrow-light">Partner With Nile Lingua Lab</span>
+                <h2>Let’s build the right language workflow.</h2>
+                <p>{{ $page['partner_copy'] }}</p>
+                <div class="services-overview-actions">
+                    <a class="button button-light" href="/contact">Request a Quote <span aria-hidden="true">↗</span></a>
+                    <a class="text-link text-link-light" href="/contact">Contact Our Team <span aria-hidden="true">→</span></a>
+                </div>
+                <p class="services-overview-contact">{{ $page['contact_note'] }}</p>
+            </div>
+        </section>
+    @elseif ($kind === 'contact')
         <section class="contact-section wrap">
             <div class="contact-copy">
                 <span class="eyebrow">A few details to get us started</span>
