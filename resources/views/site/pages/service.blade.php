@@ -1,24 +1,27 @@
 @php
     $slug = request()->segment(2);
 
-    // Visual identity per service: hero illustration, accent and icons for the "at a glance" cards.
+    // Visual identity per service: hero illustration and accent colour.
     $themes = [
-        'legal-technical-translation' => ['visual' => 'document', 'variant' => 'terracotta', 'icons' => ['book', 'compass', 'scale']],
-        'subtitling' => ['visual' => 'subtitles', 'variant' => 'gold', 'icons' => ['film', 'captions', 'layers']],
-        'transcription' => ['visual' => 'transcript', 'variant' => 'gold', 'icons' => ['mic', 'book', 'message']],
-        'ai-language-data-mtpe' => ['visual' => 'data', 'variant' => 'teal', 'icons' => ['check', 'layers', 'chart']],
+        'legal-technical-translation' => ['visual' => 'document', 'variant' => 'terracotta'],
+        'subtitling' => ['visual' => 'subtitles', 'variant' => 'gold'],
+        'transcription' => ['visual' => 'transcript', 'variant' => 'gold'],
+        'ai-language-data-mtpe' => ['visual' => 'data', 'variant' => 'teal'],
     ];
-    $theme = $themes[$slug] ?? ['visual' => 'document', 'variant' => 'teal', 'icons' => ['check', 'check', 'check']];
-
-    $otherServices = collect(config('site.services'))->except($slug);
+    $theme = $themes[$slug] ?? ['visual' => 'document', 'variant' => 'teal'];
+    $languages = config('site.pages.services.languages', []);
+    $quoteUrl = '/contact?service='.$slug.'#quote-form';
 @endphp
 
 <x-page-hero :title="$page['headline']" :current="$page['title']" :eyebrow="$page['eyebrow'] ?? null"
-             :crumbs="[['label' => 'Services', 'href' => '/services']]">
+             :crumbs="[['label' => __('Services'), 'href' => '/services']]">
+    @if (!empty($page['subheading']))
+        <h2 class="nll-subtitle">{{ $page['subheading'] }}</h2>
+    @endif
     <p class="nll-lead">{{ $page['intro'] }}</p>
     <div class="nll-actions">
-        <a class="nll-button nll-button-gold" href="/contact">Request a quote <span class="nll-arrow" aria-hidden="true">→</span></a>
-        <a class="nll-button nll-button-ghost" href="#service-details">How it works</a>
+        <a class="nll-button nll-button-gold" href="{{ $quoteUrl }}">{{ __('Request a Quote') }} <span class="nll-arrow" aria-hidden="true">→</span></a>
+        <a class="nll-button nll-button-ghost" href="{{ $quoteUrl }}">{{ $page['secondary_cta'] ?? 'Book a Consultation' }}</a>
     </div>
 
     <x-slot:aside>
@@ -27,13 +30,13 @@
                 <div class="nll-visual-card nll-visual-video" aria-hidden="true">
                     <div class="nll-video-frame">
                         <span class="nll-video-play">▶</span>
-                        <span class="nll-video-caption">Subtitles that respect the speaker,<br>the screen and the viewer.</span>
+                        <span class="nll-video-caption">{!! __('Subtitles in the languages<br>your viewers actually speak.') !!}</span>
                     </div>
                     <div class="nll-timeline-rows">
                         <div><code>00:01:12,400 → 00:01:15,000</code><span class="nll-bar" style="--w: 70%"></span></div>
                         <div><code>00:01:15,200 → 00:01:18,600</code><span class="nll-bar" style="--w: 52%"></span></div>
                     </div>
-                    <div class="nll-visual-foot"><span class="nll-visual-badge">✓ Timing reviewed</span><span>SRT · WebVTT · EBU-STL</span></div>
+                    <div class="nll-visual-foot"><span class="nll-visual-badge">{{ __('✓ Timing reviewed') }}</span><span>SRT · VTT · STL · ASS</span></div>
                 </div>
                 @break
             @case('transcript')
@@ -45,10 +48,10 @@
                         @endforeach
                     </div>
                     <div class="nll-visual-body">
-                        <div class="nll-transcript-row"><b>Speaker 1</b><code>[00:02:14]</code><span class="nll-bar" style="--w: 88%"></span><span class="nll-bar" style="--w: 64%"></span></div>
-                        <div class="nll-transcript-row"><b>Speaker 2</b><code>[00:02:31]</code><span class="nll-bar" style="--w: 76%"></span></div>
+                        <div class="nll-transcript-row"><b>{{ __('Speaker 1') }}</b><code>[00:02:14]</code><span class="nll-bar" style="--w: 88%"></span><span class="nll-bar" style="--w: 64%"></span></div>
+                        <div class="nll-transcript-row"><b>{{ __('Speaker 2') }}</b><code>[00:02:31]</code><span class="nll-bar" style="--w: 76%"></span></div>
                     </div>
-                    <div class="nll-visual-foot"><span class="nll-visual-badge">✓ Speaker labels</span><span>Timestamps</span></div>
+                    <div class="nll-visual-foot"><span class="nll-visual-badge">{{ __('✓ Speaker labels') }}</span><span>.docx · .txt · .csv</span></div>
                 </div>
                 @break
             @case('data')
@@ -63,7 +66,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="nll-visual-foot"><span class="nll-visual-badge">✓ Human-in-the-loop</span><span>Light · Full MTPE</span></div>
+                    <div class="nll-visual-foot"><span class="nll-visual-badge">{{ __('✓ Human-in-the-loop') }}</span><span>{{ __('Light · Full MTPE') }}</span></div>
                 </div>
                 @break
             @default
@@ -77,39 +80,43 @@
                         <span class="nll-bar" style="--w: 80%"></span>
                     </div>
                     <div class="nll-term-card">
-                        <span>Glossary</span>
-                        <b>Terminology aligned</b>
+                        <span>{{ __('Glossary') }}</span>
+                        <b>{{ __('Terminology aligned') }}</b>
                     </div>
-                    <div class="nll-visual-foot"><span class="nll-visual-badge">✓ Independent review</span><span>Contracts · Manuals</span></div>
+                    <div class="nll-visual-foot"><span class="nll-visual-badge">{{ __('✓ Independent editing') }}</span><span>{{ __('TM · Termbase') }}</span></div>
                 </div>
         @endswitch
     </x-slot:aside>
 </x-page-hero>
 
-@if (!empty($page['notice']))
-    <div class="nll-wrap nll-notice-wrap" data-reveal>
-        <div class="nll-notice" role="note">
-            <span class="nll-notice-icon" aria-hidden="true">i</span>
-            <div><strong>Please note</strong><p>{{ $page['notice'] }}</p></div>
-        </div>
-    </div>
-@endif
-
-@if (count($cards))
-    <section class="nll-section nll-section-tight" aria-labelledby="glance-title">
+{{-- Capabilities / specializations --}}
+@if (!empty($page['capabilities']))
+    <section class="nll-section" aria-labelledby="capabilities-title">
         <div class="nll-wrap">
             <div class="nll-heading" data-reveal>
                 <div>
-                    <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>At a glance</span>
-                    <h2 id="glance-title">What this service <em>covers</em></h2>
+                    <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>{{ __('What we deliver') }}</span>
+                    <h2 id="capabilities-title">{{ $page['capabilities_heading'] }}</h2>
                 </div>
             </div>
-            <div class="nll-glance-grid nll-variant-{{ $theme['variant'] }}">
-                @foreach ($cards as $card)
-                    <article class="nll-glance" data-reveal>
-                        <span class="nll-icon"><x-icon :name="$theme['icons'][$loop->index] ?? 'check'"/></span>
-                        <h3>{{ $card['title'] }}</h3>
-                        <p>{{ $card['body'] }}</p>
+            <div class="nll-capability-grid nll-variant-{{ $theme['variant'] }}">
+                @foreach ($page['capabilities'] as $capability)
+                    <article class="nll-capability {{ !empty($capability['link']) ? 'is-pointer' : '' }} {{ !empty($capability['wide']) ? 'is-wide' : '' }}" data-reveal>
+                        <span class="nll-icon"><x-icon :name="$capability['icon'] ?? 'check'"/></span>
+                        <h3>{{ $capability['title'] }}</h3>
+                        <p>
+                            {{ $capability['body'] }}
+                            @if (!empty($capability['link']))
+                                <a href="{{ $capability['link']['href'] }}">{{ $capability['link']['label'] }}</a>.
+                            @endif
+                        </p>
+                        @if (!empty($capability['items']))
+                            <ul class="nll-capability-items">
+                                @foreach ($capability['items'] as $item)
+                                    <li><strong>{{ $item['label'] }}:</strong> {{ $item['text'] }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </article>
                 @endforeach
             </div>
@@ -117,49 +124,78 @@
     </section>
 @endif
 
-@if (!empty($page['sections']))
-    <section class="nll-section nll-section-sand" id="service-details" aria-labelledby="details-title">
-        <div class="nll-wrap nll-detail-layout">
-            <div class="nll-detail-main">
-                <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>How we approach it</span>
-                <h2 class="nll-h2" id="details-title">The details that <em>shape the work</em></h2>
-                <div class="nll-detail-list">
-                    @foreach ($page['sections'] as $section)
-                        <article class="nll-detail" data-reveal>
-                            <span class="nll-detail-index" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                            <div>
-                                <h3>{{ $section['heading'] }}</h3>
-                                <p>{{ $section['body'] }}</p>
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
+{{-- Languages --}}
+@if (!empty($page['languages_heading']))
+    <section class="nll-section nll-section-tight nll-section-sand" aria-labelledby="languages-title">
+        <div class="nll-wrap nll-service-languages" data-reveal>
+            <div>
+                <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>{{ __('Native-speaker linguists') }}</span>
+                <h2 class="nll-h2" id="languages-title">{{ $page['languages_heading'] }}</h2>
+                <a class="nll-link" href="/languages">{{ __('See all supported languages') }} <span class="nll-arrow" aria-hidden="true">→</span></a>
             </div>
-
-            <aside class="nll-detail-aside" aria-label="Next steps">
-                <div class="nll-quote-card">
-                    <span class="nll-eyebrow nll-eyebrow-light"><span class="nll-dot" aria-hidden="true"></span>Request a quote</span>
-                    <p>{{ $page['cta'] }}</p>
-                    <a class="nll-button nll-button-gold" href="/contact">Request a quote <span class="nll-arrow" aria-hidden="true">→</span></a>
-                    <a class="nll-quote-alt" href="https://wa.me/250788750971" target="_blank" rel="noopener">Or message us on WhatsApp <span aria-hidden="true">↗</span></a>
-                </div>
-                <nav class="nll-related-card" aria-label="Other services">
-                    <span class="nll-related-title">Other services</span>
-                    @foreach ($otherServices as $key => $service)
-                        <a href="/services/{{ $key }}">{{ $service['title'] }} <span class="nll-arrow" aria-hidden="true">→</span></a>
+            <div class="nll-panel">
+                <p class="nll-panel-copy"><strong>{{ __('Languages:') }}</strong></p>
+                <ul class="nll-tags nll-tags-lg">
+                    @foreach ($languages as $language)
+                        <li>{{ $language }}</li>
                     @endforeach
-                    <a class="nll-related-all" href="/services">All services <span class="nll-arrow" aria-hidden="true">→</span></a>
-                </nav>
-            </aside>
+                </ul>
+                <p class="nll-panel-note">{{ __('Need another language?') }} <a href="/contact">{{ __('Ask us') }}</a>.</p>
+                @if (!empty($page['languages_extra']))
+                    <p class="nll-panel-note"><strong>{{ $page['languages_extra']['label'] }}:</strong> {{ $page['languages_extra']['text'] }}</p>
+                @endif
+            </div>
         </div>
     </section>
 @endif
 
-@if (!empty($page['cta']))
-    <x-cta-band compact eyebrow="Ready when you are" :title="e($page['cta'])">
-        <div class="nll-actions">
-            <a class="nll-button nll-button-gold" href="/contact">Let’s talk <span class="nll-arrow" aria-hidden="true">→</span></a>
-            <a class="nll-button nll-button-ghost" href="/services">Explore all services</a>
+{{-- Process --}}
+@if (!empty($page['steps']))
+    <section class="nll-section" aria-labelledby="steps-title">
+        <div class="nll-wrap">
+            <div class="nll-heading" data-reveal>
+                <div>
+                    <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>{{ __('A clear, careful process') }}</span>
+                    <h2 id="steps-title">{{ $page['steps_heading'] }}</h2>
+                </div>
+            </div>
+            @include('site.partials.steps', ['steps' => $page['steps']])
+            @if (!empty($page['steps_note']))
+                <p class="nll-steps-note"><span aria-hidden="true">✳</span>{{ $page['steps_note'] }}</p>
+            @endif
         </div>
-    </x-cta-band>
+    </section>
 @endif
+
+{{-- Confidentiality / responsible data --}}
+@foreach ($page['text_sections'] ?? [] as $section)
+    <section class="nll-section nll-section-tight nll-section-sand" aria-labelledby="text-section-{{ $loop->iteration }}">
+        <div class="nll-wrap">
+            <div class="nll-assurance" data-reveal>
+                <span class="nll-icon"><x-icon :name="$section['icon'] ?? 'shield'"/></span>
+                <div>
+                    <h2 id="text-section-{{ $loop->iteration }}">{{ $section['heading'] }}</h2>
+                    <p>{{ $section['body'] }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+@endforeach
+
+<x-cta-band compact eyebrow="{{ __('Request a quote') }}" :title="e($page['cta_heading'] ?? __('Get a Quote'))">
+    @if (!empty($page['cta']))
+        <p>{{ $page['cta'] }}</p>
+    @endif
+    <div class="nll-actions">
+        <a class="nll-button nll-button-gold" href="{{ $quoteUrl }}">{{ __('Request a Quote') }} <span class="nll-arrow" aria-hidden="true">→</span></a>
+        <a class="nll-button nll-button-ghost" href="{{ config('site.contact_info.whatsapp_url') }}" target="_blank" rel="noopener">WhatsApp {{ config('site.contact_info.phone') }} <span aria-hidden="true">↗</span></a>
+    </div>
+    @if (!empty($page['related_links']))
+        <nav class="nll-cta-related" aria-label="{{ __('Related pages') }}">
+            <span>{{ __('Related') }}</span>
+            @foreach ($page['related_links'] as $link)
+                <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+            @endforeach
+        </nav>
+    @endif
+</x-cta-band>

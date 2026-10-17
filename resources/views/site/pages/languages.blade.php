@@ -1,6 +1,5 @@
 @php
     $supported = config('site.pages.services.languages', []);
-    $regionIcons = ['globe', 'compass', 'book', 'pin', 'people', 'sparkle'];
 
     // Approximate main region for each supported language (longitude, latitude).
     // Languages not listed here (e.g. English, French) are shown as international languages.
@@ -22,29 +21,28 @@
 
     // Hand-placed label offsets (dx, dy, text-anchor) so names don't collide around the Great Lakes.
     $labelOffsets = [
-        'Kinyarwanda' => [-5, 1.6, 'end'],
-        'Kirundi' => [-5, 3.2, 'end'],
-        'Runyankore-Rukiga' => [-5, -2.4, 'end'],
-        'Luganda' => [0, -5.5, 'middle'],
-        'Luo' => [5, 1.6, 'start'],
-        'Swahili' => [5, 1.6, 'start'],
-        'Lingala' => [0, -5.5, 'middle'],
-        'Kikongo' => [0, 8, 'middle'],
-        'Tshiluba' => [0, 8, 'middle'],
-        'Sango' => [0, 8, 'middle'],
-        'Dinka' => [5, 1.6, 'start'],
-        'Nuer' => [5, 1.6, 'start'],
-        'Somali' => [-5, 1.6, 'end'],
+        'Kinyarwanda' => [-7, 2.5, 'end'],
+        'Kirundi' => [6, 4.5, 'start'],
+        'Runyankore-Rukiga' => [-7, -7, 'end'],
+        'Luganda' => [2, -7.5, 'middle'],
+        'Luo' => [7, 2.5, 'start'],
+        'Swahili' => [7, 2.5, 'start'],
+        'Lingala' => [0, -8, 'middle'],
+        'Kikongo' => [-7, 7, 'end'],
+        'Tshiluba' => [0, 12, 'middle'],
+        'Sango' => [0, -8, 'middle'],
+        'Dinka' => [7, 2.5, 'start'],
+        'Nuer' => [7, 2.5, 'start'],
+        'Somali' => [7, 2.5, 'start'],
     ];
 
     // Same projection as the Africa outline symbol in partials/svg-defs.
     $project = fn (float $lon, float $lat) => [round(($lon + 18) * 5.5, 1), round((38 - $lat) * 5.6, 1)];
 
     $mapped = collect($supported)->filter(fn ($language) => isset($regions[$language]))->values();
-    $international = collect($supported)->reject(fn ($language) => isset($regions[$language]))->values();
     $hq = $project(30.06, -1.95);
 
-    // Orientation aids for the zoomed map: major lakes and faint country / ocean names.
+    // Orientation aids for the map: major lakes and faint country / ocean names.
     $lakes = [
         'Lake Victoria' => [[31.8, -1.0], [32.5, 0.3], [33.4, 0.4], [34.1, 0.0], [34.6, -0.4], [34.0, -1.2], [33.6, -2.3], [32.8, -2.6], [31.9, -2.0], [31.6, -1.4]],
         'Lake Tanganyika' => [[29.1, -3.4], [29.4, -3.4], [30.4, -5.5], [30.8, -7.0], [31.1, -8.6], [30.6, -8.7], [29.7, -6.9], [29.4, -5.0]],
@@ -52,138 +50,162 @@
         'Lake Turkana' => [[35.9, 4.5], [36.3, 4.3], [36.6, 3.0], [36.2, 2.4], [35.9, 3.5]],
     ];
     $places = [
-        ['DR Congo', 21.5, -2.8], ['C.A.R.', 21.0, 6.8], ['South Sudan', 26.6, 7.4], ['Ethiopia', 39.5, 8.6],
-        ['Uganda', 32.6, 3.4], ['Kenya', 38.6, 2.2], ['Tanzania', 33.4, -7.9], ['Somalia', 45.6, 5.6],
+        ['DR Congo', 24.5, -9.2], ['C.A.R.', 21.0, 7.6], ['South Sudan', 25.4, 5.4], ['Ethiopia', 39.5, 8.6],
+        ['Kenya', 38.8, 1.2], ['Tanzania', 34.6, -9.0], ['Somalia', 45.6, 6.0],
     ];
     $points = fn (array $coordinates) => collect($coordinates)->map(fn ($c) => implode(',', $project($c[0], $c[1])))->implode(' ');
+    $slug = fn (string $name) => \Illuminate\Support\Str::slug($name);
 @endphp
 
 <x-page-hero :title="$page['headline']" :current="$page['title']" :eyebrow="$page['eyebrow']" :motif="false">
-    <p class="nll-lead">{{ $page['intro'] }}</p>
+    <h2 class="nll-subtitle">{{ $page['subheading'] }}</h2>
+    @foreach ($page['paragraphs'] as $paragraph)
+        <p class="nll-lead {{ $loop->first ? '' : 'nll-lead-secondary' }}">{{ $paragraph }}</p>
+    @endforeach
     <div class="nll-actions">
-        <a class="nll-button nll-button-gold" href="#supported-languages">See supported languages <span class="nll-arrow" aria-hidden="true">↓</span></a>
-        <a class="nll-button nll-button-ghost" href="/contact">Ask about a language</a>
+        <a class="nll-button nll-button-gold" href="/services">{{ __('Explore Our Services') }} <span class="nll-arrow" aria-hidden="true">→</span></a>
+        <a class="nll-button nll-button-ghost" href="/contact">{{ __('Discuss Your Language Needs') }}</a>
     </div>
 
     <x-slot:aside>
         <div class="nll-hero-stat" aria-hidden="true">
             <span class="nll-hero-stat-number">{{ count($supported) }}</span>
-            <span class="nll-hero-stat-label">Languages<small>Native-speaker linguists</small></span>
+            <span class="nll-hero-stat-label">{{ __('Languages') }}<small>{{ __('One point of contact') }}</small></span>
         </div>
     </x-slot:aside>
 </x-page-hero>
 
-@if (count($supported))
-    <section class="nll-coverage-band" id="supported-languages" aria-labelledby="supported-title">
-        <div class="nll-wrap">
-            <div class="nll-heading" data-reveal>
-                <div>
-                    <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>Headquartered in Kigali, Rwanda</span>
-                    <h2 id="supported-title">Languages we <em>work in</em></h2>
-                </div>
-                <p class="nll-heading-aside">Native-speaker linguists across East, Central and Northeast Africa. Hover a language to see where it is mainly spoken.</p>
-            </div>
-
-            <div class="nll-coverage-band-grid" data-language-map>
-                <figure class="nll-region-map" data-reveal>
-                    <svg viewBox="150 135 225 140" role="img" aria-labelledby="region-map-title">
-                        <title id="region-map-title">Map of East and Central Africa showing the main regions of the languages we work in</title>
-                        <defs>
-                            <pattern id="nll-dots-fine" width="3" height="3" patternUnits="userSpaceOnUse">
-                                <circle cx="1.5" cy="1.5" r=".55"/>
-                            </pattern>
-                        </defs>
-                        <rect class="nll-region-sea" x="150" y="135" width="225" height="140"/>
-                        <use class="nll-region-outline" href="#nll-africa" x="-10" y="-10" width="410" height="430"/>
-                        <use class="nll-region-land" href="#nll-africa" x="-10" y="-10" width="410" height="430"/>
-
-                        @foreach ($lakes as $lake => $coordinates)
-                            <polygon class="nll-region-lake" points="{{ $points($coordinates) }}"><title>{{ $lake }}</title></polygon>
-                        @endforeach
-
-                        @foreach ($places as [$name, $lon, $lat])
-                            @php([$px, $py] = $project($lon, $lat))
-                            <text class="nll-region-place" x="{{ $px }}" y="{{ $py }}">{{ $name }}</text>
-                        @endforeach
-                        @php([$ox, $oy] = $project(43.5, -5.5))
-                        <text class="nll-region-place nll-region-ocean" x="{{ $ox }}" y="{{ $oy }}">Indian Ocean</text>
-
-                        <g class="nll-region-hq">
-                            <circle class="nll-region-hq-ring" cx="{{ $hq[0] }}" cy="{{ $hq[1] }}" r="6"/>
-                        </g>
-
-                        @foreach ($mapped as $language)
-                            @php([$x, $y] = $project($regions[$language][1], $regions[$language][2]))
-                            @php([$dx, $dy, $anchor] = $labelOffsets[$language] ?? [5, 1.6, 'start'])
-                            <g class="nll-region-marker" data-map-marker="{{ $loop->iteration }}">
-                                <title>{{ $language }} · {{ $regions[$language][0] }}</title>
-                                <circle class="nll-region-glow" cx="{{ $x }}" cy="{{ $y }}" r="5"/>
-                                <circle class="nll-region-pin" cx="{{ $x }}" cy="{{ $y }}" r="2.3"/>
-                                <text class="nll-region-label" x="{{ $x + $dx }}" y="{{ $y + $dy }}" text-anchor="{{ $anchor }}">{{ $language }}</text>
-                            </g>
-                        @endforeach
-                    </svg>
-                    <figcaption>
-                        <span><i class="nll-legend-pin"></i>Language region</span>
-                        <span><i class="nll-legend-hq"></i>Kigali HQ</span>
-                        <span class="nll-legend-note">Locations are approximate; many languages are spoken across borders.</span>
-                    </figcaption>
-                </figure>
-
-                <div data-reveal>
-                    <ol class="nll-language-grid">
-                        @foreach ($mapped as $language)
-                            <li data-map-link="{{ $loop->iteration }}">
-                                <span class="nll-language-icon" aria-hidden="true"><x-icon name="pin"/></span>
-                                <span><b>{{ $language }}</b><small>{{ $regions[$language][0] }}</small></span>
-                            </li>
-                        @endforeach
-                    </ol>
-                    @if ($international->isNotEmpty())
-                        <p class="nll-language-international"><strong>International languages:</strong> {{ $international->implode(' · ') }}</p>
-                    @endif
-                    <p class="nll-coverage-band-note">Need another language? <a href="/contact">Ask us</a>.</p>
-                </div>
+{{-- Region overview table --}}
+<section class="nll-section nll-section-tight" id="supported-languages" aria-labelledby="supported-title">
+    <div class="nll-wrap">
+        <div class="nll-heading" data-reveal>
+            <div>
+                <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>{{ __('Grouped by region') }}</span>
+                <h2 id="supported-title">{!! __('The Languages We <em>Support</em>') !!}</h2>
             </div>
         </div>
-    </section>
-@endif
+        <div class="nll-table-wrap" data-reveal>
+            <table class="nll-table nll-region-table">
+                <thead>
+                    <tr><th scope="col">{{ __('Region') }}</th><th scope="col">{{ __('Languages') }}</th><th scope="col">{{ __('Where they are spoken') }}</th></tr>
+                </thead>
+                <tbody>
+                    @foreach ($page['region_table'] as $row)
+                        <tr>
+                            <th scope="row"><a href="#region-{{ $loop->iteration }}">{{ $row['region'] }}</a></th>
+                            <td data-label="{{ __('Languages') }}">{{ $row['languages'] }}</td>
+                            <td data-label="{{ __('Where they are spoken') }}">{{ $row['where'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <p class="nll-steps-note"><span aria-hidden="true">✳</span><span class="nll-note-text">{{ __('Need a language that is not listed?') }} <a href="/contact">{{ __('Ask us') }}</a>. {{ __('We can often arrange it on request.') }}</span></p>
+    </div>
+</section>
 
-@if (count($cards))
-    <section class="nll-section" aria-labelledby="regions-title">
-        <div class="nll-wrap">
-            <div class="nll-heading" data-reveal>
-                <div>
-                    <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>Planning by region</span>
-                    <h2 id="regions-title">Choosing the right <em>language and locale</em></h2>
-                </div>
-            </div>
-            <div class="nll-region-grid">
-                @foreach ($cards as $card)
-                    <a class="nll-region {{ $loop->last ? 'is-accent' : '' }}" href="{{ $card['href'] ?? '/contact' }}" data-reveal>
-                        <span class="nll-icon"><x-icon :name="$regionIcons[$loop->index] ?? 'globe'"/></span>
-                        <h3>{{ $card['title'] }}</h3>
-                        <p>{{ $card['body'] }}</p>
-                        <span class="nll-industry-link">Discuss your languages <span class="nll-arrow" aria-hidden="true">→</span></span>
-                    </a>
+{{-- Language descriptions beside the region map --}}
+<section class="nll-section nll-section-sand" aria-label="{{ __('Language profiles by region') }}">
+    <div class="nll-wrap nll-lang-layout" data-language-map>
+        <figure class="nll-region-map nll-lang-map" data-reveal>
+            <svg viewBox="-6 -4 396 420" role="img" aria-labelledby="region-map-title">
+                <title id="region-map-title">{{ __('Map of Africa showing where the languages we support are mainly spoken') }}</title>
+                <defs>
+                    <pattern id="nll-dots-fine" width="4.5" height="4.5" patternUnits="userSpaceOnUse">
+                        <circle cx="2.25" cy="2.25" r=".9"/>
+                    </pattern>
+                </defs>
+                <rect class="nll-region-sea" x="-6" y="-4" width="396" height="420"/>
+                <use class="nll-region-outline" href="#nll-africa" x="-10" y="-10" width="410" height="430"/>
+                <use class="nll-region-land" href="#nll-africa" x="-10" y="-10" width="410" height="430"/>
+
+                @foreach ($lakes as $lake => $coordinates)
+                    <polygon class="nll-region-lake" points="{{ $points($coordinates) }}"><title>{{ __($lake) }}</title></polygon>
                 @endforeach
+
+                @foreach ($places as [$name, $lon, $lat])
+                    @php([$px, $py] = $project($lon, $lat))
+                    <text class="nll-region-place" x="{{ $px }}" y="{{ $py }}">{{ __($name) }}</text>
+                @endforeach
+                @php([$ox, $oy] = $project(46.5, -7.5))
+                <text class="nll-region-place nll-region-ocean" x="{{ $ox }}" y="{{ $oy }}">{{ __('Indian Ocean') }}</text>
+                @php([$ax, $ay] = $project(-8.5, -8))
+                <text class="nll-region-place nll-region-ocean" x="{{ $ax }}" y="{{ $ay }}">{{ __('Atlantic Ocean') }}</text>
+
+                <g class="nll-region-hq">
+                    <circle class="nll-region-hq-ring" cx="{{ $hq[0] }}" cy="{{ $hq[1] }}" r="10"/>
+                </g>
+
+                @foreach ($mapped as $language)
+                    @php([$x, $y] = $project($regions[$language][1], $regions[$language][2]))
+                    @php([$dx, $dy, $anchor] = $labelOffsets[$language] ?? [7, 2.5, 'start'])
+                    <g class="nll-region-marker" data-map-marker="{{ $slug($language) }}">
+                        <title>{{ $language }}</title>
+                        <circle class="nll-region-glow" cx="{{ $x }}" cy="{{ $y }}" r="8"/>
+                        <circle class="nll-region-pin" cx="{{ $x }}" cy="{{ $y }}" r="3.6"/>
+                        <text class="nll-region-label" x="{{ $x + $dx }}" y="{{ $y + $dy }}" text-anchor="{{ $anchor }}">{{ $language }}</text>
+                    </g>
+                @endforeach
+            </svg>
+            <figcaption>
+                <span><i class="nll-legend-pin"></i>{{ __('Language region') }}</span>
+                <span><i class="nll-legend-hq"></i>{{ __('Kigali HQ') }}</span>
+                <span class="nll-legend-note">{{ __('Pins mark a representative area; many languages are spoken across borders.') }}</span>
+            </figcaption>
+        </figure>
+
+        <div class="nll-lang-groups">
+            @foreach ($page['groups'] as $group)
+                <div class="nll-lang-group nll-anchor" id="region-{{ $loop->iteration }}">
+                    <h2 class="nll-lang-group-title">{{ $group['heading'] }}</h2>
+                    <div class="nll-lang-cards">
+                        @foreach ($group['languages'] as $name => $description)
+                            <article class="nll-lang-card" data-map-link="{{ $slug($name) }}" data-reveal>
+                                <h3><span class="nll-language-icon" aria-hidden="true"><x-icon name="{{ isset($regions[$name]) ? 'pin' : 'globe' }}"/></span>{{ $name }}</h3>
+                                <p>{{ $description }}</p>
+                            </article>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- What you can expect --}}
+<section class="nll-section" aria-labelledby="expect-title">
+    <div class="nll-wrap">
+        <div class="nll-heading" data-reveal>
+            <div>
+                <span class="nll-eyebrow"><span class="nll-dot" aria-hidden="true"></span>{{ __('Our standard, in every language') }}</span>
+                <h2 id="expect-title">{!! __('What You Can Expect in <em>Every Language</em>') !!}</h2>
             </div>
         </div>
-    </section>
-@endif
-
-@if (!empty($page['sections']))
-    <section class="nll-section nll-section-sand" aria-label="Planning guidance">
-        <div class="nll-wrap nll-guidance-grid">
-            @foreach ($page['sections'] as $section)
-                <article class="nll-guidance" data-reveal>
-                    <span class="nll-guidance-index" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                    <h2>{{ $section['heading'] }}</h2>
-                    <p>{{ $section['body'] }}</p>
+        <div class="nll-feature-grid">
+            @foreach ($page['expectations'] as $item)
+                <article class="nll-feature" data-reveal>
+                    <div class="nll-feature-top">
+                        <span class="nll-icon"><x-icon :name="$item['icon']"/></span>
+                    </div>
+                    <h3>{{ $item['label'] }}</h3>
+                    <p>{{ $item['text'] }}</p>
                 </article>
             @endforeach
         </div>
-    </section>
-@endif
+    </div>
+</section>
 
-@include('site.partials.page-cta')
+<x-cta-band compact eyebrow="{{ __('Start a language project') }}" :title="e($page['cta_heading'])">
+    <p>{{ $page['cta'] }}</p>
+    <div class="nll-actions">
+        <a class="nll-button nll-button-gold" href="/contact">{{ __('Request a Quote') }} <span class="nll-arrow" aria-hidden="true">→</span></a>
+        <a class="nll-button nll-button-ghost" href="{{ config('site.contact_info.whatsapp_url') }}" target="_blank" rel="noopener">WhatsApp {{ config('site.contact_info.phone') }} <span aria-hidden="true">↗</span></a>
+    </div>
+    <p class="nll-cta-note">{{ $page['cta_note'] }}</p>
+    <nav class="nll-cta-related" aria-label="{{ __('Related services') }}">
+        <span>{{ __('Related') }}</span>
+        @foreach ($page['related_links'] as $link)
+            <a href="{{ $link['href'] }}">{{ $link['label'] }}</a>
+        @endforeach
+    </nav>
+</x-cta-band>

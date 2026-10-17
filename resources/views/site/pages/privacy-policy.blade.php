@@ -1,22 +1,22 @@
 <x-page-hero compact :title="$page['headline']" :current="$page['title']" :eyebrow="$page['eyebrow']" :motif="false">
     <dl class="nll-policy-meta">
         @if (!empty($page['effective_date']))
-            <div><dt>Effective date</dt><dd>{{ $page['effective_date'] }}</dd></div>
+            <div><dt>{{ __('Effective date') }}</dt><dd>{{ $page['effective_date'] }}</dd></div>
         @endif
         @if (!empty($page['company']))
-            <div><dt>Company</dt><dd>{{ $page['company'] }}</dd></div>
+            <div><dt>{{ __('Company') }}</dt><dd>{{ $page['company'] }}</dd></div>
         @endif
     </dl>
 </x-page-hero>
 
 <div class="nll-wrap nll-reading nll-reading-legal">
-    <aside class="nll-toc" aria-label="Contents">
-        <span class="nll-toc-title">Contents</span>
+    <aside class="nll-toc" aria-label="{{ __('Contents') }}">
+        <span class="nll-toc-title">{{ __('Contents') }}</span>
         <ol>
             @foreach ($page['sections'] as $section)
                 <li><a href="#policy-{{ $loop->iteration }}">{{ $loop->iteration }}. {{ $section['heading'] }}</a></li>
             @endforeach
-            <li><a href="#policy-contact">Contact us</a></li>
+            <li><a href="#policy-contact">{{ __('Contact us') }}</a></li>
         </ol>
     </aside>
 
@@ -65,13 +65,13 @@
         @endforeach
 
         <section class="nll-policy-contact nll-anchor" id="policy-contact" aria-labelledby="policy-contact-title">
-            <h2 id="policy-contact-title">Contact us</h2>
-            <p>To ask about your data, request a copy, a correction or deletion, or to withdraw consent, contact us:</p>
+            <h2 id="policy-contact-title">{{ __('Contact us') }}</h2>
+            <p>{{ __('To ask about your data, request a copy, a correction or deletion, or to withdraw consent, contact us:') }}</p>
             <ul class="nll-policy-channels">
-                <li><x-icon name="mail"/><a href="mailto:contact@nilelingua.com">contact@nilelingua.com</a></li>
-                <li><x-icon name="phone"/><a href="tel:+250788750971">+250 788 750 971</a></li>
-                <li><x-icon name="whatsapp"/><a href="https://wa.me/250788750971" target="_blank" rel="noopener">WhatsApp +250 788 750 971</a></li>
-                <li><x-icon name="pin"/><span>{{ $page['company'] ?? 'Gatenga, Kicukiro, Kigali, Rwanda' }}</span></li>
+                <li><x-icon name="mail"/><a href="mailto:{{ config('site.contact_info.email') }}">{{ config('site.contact_info.email') }}</a></li>
+                <li><x-icon name="phone"/><a href="{{ \App\Support\Cms\Markup::tel(config('site.contact_info.phone')) }}">{{ config('site.contact_info.phone') }}</a></li>
+                <li><x-icon name="whatsapp"/><a href="{{ config('site.contact_info.whatsapp_url') }}" target="_blank" rel="noopener">WhatsApp {{ config('site.contact_info.phone') }}</a></li>
+                <li><x-icon name="pin"/><span>{{ $page['company'] ?? 'Nile Lingua Lab Ltd, Kicukiro, '.__('Kigali, Rwanda') }}</span></li>
             </ul>
         </section>
     </article>

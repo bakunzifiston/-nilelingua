@@ -277,18 +277,6 @@
    -------------------------------------------------------------------------- */
 
 .nll-tools { border-block: 1px solid var(--nll-line); background: var(--nll-sand); }
-.nll-tools-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
-.nll-tool-group {
-    display: flex;
-    padding: 28px 24px;
-    flex-direction: column;
-    border: 1px solid var(--nll-line);
-    border-radius: var(--nll-radius);
-    background: var(--nll-surface);
-}
-.nll-tool-index { color: var(--nll-gold-text); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
-.nll-tool-group h3 { min-height: 2.6em; margin: 12px 0 20px; color: var(--nll-ink); font-size: 17px; font-weight: 700; line-height: 1.3; }
-.nll-tool-group .nll-tags + .nll-tags { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--nll-line); }
 .nll-tools-note { display: flex; margin: 28px 0 0; align-items: center; gap: 10px; color: var(--nll-copy); font-size: 16px; }
 .nll-tools-note > span { color: var(--nll-gold-text); font-size: 18px; }
 
@@ -302,24 +290,22 @@
     .nll-float-target { font-size: 18px; }
     .nll-service-localization,
     .nll-service-translation { grid-column: span 6; }
-    .nll-tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .nll-tool-group h3 { min-height: 0; }
 }
 
 @media (max-width: 860px) {
-    .nll-hero-grid { grid-template-columns: 1fr; }
+    .nll-hero-grid { grid-template-columns: minmax(0, 1fr); }
     .nll-hero-copy h1 { max-width: 16ch; }
     .nll-hero-visual { width: min(100%, 520px); margin-inline: auto; }
-    .nll-service-grid { grid-template-columns: 1fr; gap: 20px; }
+    .nll-service-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     .nll-service-localization,
     .nll-service-translation,
     .nll-service-audiovisual,
     .nll-service-data { grid-column: auto; min-height: 0; }
     .nll-service-art { width: 150px; }
     .nll-service-translation .nll-service-art { width: 110px; }
-    .nll-languages-grid { grid-template-columns: 1fr; }
+    .nll-languages-grid { grid-template-columns: minmax(0, 1fr); }
     .nll-coverage-map { width: min(100%, 480px); }
-    .nll-why-grid { grid-template-columns: 1fr; }
+    .nll-why-grid { grid-template-columns: minmax(0, 1fr); }
     .nll-why-intro { position: static; }
 }
 
@@ -355,8 +341,6 @@
     .nll-why-icon { width: 48px; height: 48px; border-radius: 12px; }
     .nll-why-list > li > div { margin-top: 10px; }
 
-    .nll-tools-grid { grid-template-columns: 1fr; gap: 14px; }
-    .nll-tool-group { padding: 22px 20px; }
     .nll-tools-note { align-items: flex-start; font-size: 15px; }
 }
 
@@ -365,4 +349,16 @@
     .nll-hero-stage,
     .nll-coverage-map { width: 90%; align-self: flex-start; }
     .nll-float { width: 150px; }
+}
+
+/* Custom text sections added from the admin dashboard */
+.nll-home-text.is-sand { background: var(--nll-sand); }
+.nll-home-text-inner { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: start; gap: clamp(28px, 5vw, 80px); }
+.nll-home-text h2 { margin: 14px 0 0; color: var(--nll-ink); font-family: var(--serif); font-size: clamp(32px, 3.6vw, 48px); font-weight: 600; line-height: 1.08; }
+.nll-home-text h2 em { color: var(--nll-gold-text); font-style: italic; }
+.nll-home-text-body p { margin: 0 0 18px; color: var(--nll-copy); font-size: 17px; line-height: 1.75; }
+.nll-home-text-body p a { color: var(--nll-teal); text-decoration: underline; text-underline-offset: 3px; }
+.nll-home-text-body .nll-actions { margin-top: 26px; }
+@media (max-width: 900px) {
+    .nll-home-text-inner { grid-template-columns: minmax(0, 1fr); }
 }

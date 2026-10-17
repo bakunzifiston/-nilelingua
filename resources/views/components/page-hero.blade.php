@@ -22,9 +22,9 @@
 
     <div class="nll-wrap nll-page-hero-grid">
         <div class="nll-page-hero-copy">
-            <nav class="nll-breadcrumbs" aria-label="Breadcrumb">
+            <nav class="nll-breadcrumbs" aria-label="{{ __('Breadcrumb') }}">
                 <ol>
-                    <li><a href="/">Home</a></li>
+                    <li><a href="/">{{ __('Home') }}</a></li>
                     @foreach ($crumbs as $crumb)
                         <li><a href="{{ $crumb['href'] }}">{{ $crumb['label'] }}</a></li>
                     @endforeach

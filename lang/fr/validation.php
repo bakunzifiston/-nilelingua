@@ -1,0 +1,52 @@
+<?php
+
+// French validation messages for the rules used by the site's forms.
+return [
+    'accepted' => 'Le champ :attribute doit être accepté.',
+    'array' => 'Le champ :attribute doit être une liste.',
+    'email' => 'Le champ :attribute doit être une adresse e-mail valide.',
+    'extensions' => 'Le champ :attribute doit avoir l’une des extensions suivantes : :values.',
+    'file' => 'Le champ :attribute doit être un fichier.',
+    'in' => 'La valeur sélectionnée pour :attribute n’est pas valide.',
+    'max' => [
+        'array' => 'Le champ :attribute ne doit pas contenir plus de :max éléments.',
+        'file' => 'Le champ :attribute ne doit pas dépasser :max kilo-octets.',
+        'numeric' => 'Le champ :attribute ne doit pas être supérieur à :max.',
+        'string' => 'Le champ :attribute ne doit pas dépasser :max caractères.',
+    ],
+    'mimes' => 'Le champ :attribute doit être un fichier de type : :values.',
+    'min' => [
+        'array' => 'Le champ :attribute doit contenir au moins :min élément(s).',
+        'file' => 'Le champ :attribute doit faire au moins :min kilo-octets.',
+        'numeric' => 'Le champ :attribute doit être au moins égal à :min.',
+        'string' => 'Le champ :attribute doit contenir au moins :min caractères.',
+    ],
+    'required' => 'Le champ :attribute est obligatoire.',
+    'string' => 'Le champ :attribute doit être une chaîne de caractères.',
+    'uploaded' => 'Le téléversement du fichier :attribute a échoué.',
+
+    'attributes' => [
+        'name' => 'nom complet',
+        'email' => 'e-mail',
+        'phone' => 'téléphone / WhatsApp',
+        'organization' => 'organisation',
+        'service' => 'service souhaité',
+        'industry' => 'secteur',
+        'languages' => 'langues souhaitées',
+        'languages.*' => 'langue',
+        'other_language' => 'autre langue',
+        'volume' => 'volume estimé',
+        'deadline' => 'échéance',
+        'message' => 'résumé du projet',
+        'attachment' => 'fichier',
+        'consent' => 'consentement',
+        'location' => 'pays et ville de résidence',
+        'native_languages' => 'langue(s) maternelle(s)',
+        'native_languages.*' => 'langue maternelle',
+        'language_pairs' => 'combinaisons linguistiques',
+        'expertise' => 'domaine d’expertise',
+        'tools' => 'outils',
+        'tools.*' => 'outil',
+        'cv' => 'CV et portfolio',
+    ],
+];

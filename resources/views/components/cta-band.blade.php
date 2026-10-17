@@ -1,6 +1,6 @@
 @props([
     'title',
-    'eyebrow' => 'Start a conversation',
+    'eyebrow' => __('Start a conversation'),
     'compact' => false,
 ])
 

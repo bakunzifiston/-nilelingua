@@ -14,9 +14,14 @@ if (themeToggle) {
             || (!document.documentElement.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
         const themeColor = document.querySelector('meta[name="theme-color"]');
 
+        // Labels come from the page so they follow the current language.
+        const label = isDark
+            ? (themeToggle.dataset.labelLight || 'Switch to light mode')
+            : (themeToggle.dataset.labelDark || 'Switch to dark mode');
+
         themeToggle.setAttribute('aria-pressed', String(isDark));
-        themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
-        themeToggle.setAttribute('title', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+        themeToggle.setAttribute('aria-label', label);
+        themeToggle.setAttribute('title', label);
         themeToggle.querySelector('span').textContent = isDark ? '☀' : '◐';
 
         if (themeColor) {
@@ -146,4 +151,51 @@ document.querySelectorAll('[data-language-map]').forEach((map) => {
         element.addEventListener('mouseenter', () => setActive(id));
         element.addEventListener('mouseleave', () => setActive(null));
     });
+});
+
+// Knowledge Center: filter articles by topic and search text.
+document.querySelectorAll('[data-article-filter]').forEach((section) => {
+    const cards = [...section.querySelectorAll('.nll-article-card')];
+    const chips = [...section.querySelectorAll('.nll-chip-filter')];
+    const search = section.querySelector('[data-article-search]');
+    const empty = section.querySelector('[data-article-empty]');
+    let topic = '';
+
+    const apply = () => {
+        const query = (search?.value || '').trim().toLowerCase();
+        let shown = 0;
+
+        cards.forEach((card) => {
+            const visible = (!topic || card.dataset.topic === topic) && (!query || card.dataset.search.includes(query));
+            card.hidden = !visible;
+            card.classList.add('is-revealed');
+            shown += visible ? 1 : 0;
+        });
+
+        chips.forEach((chip) => {
+            const active = chip.dataset.topicFilter === topic;
+            chip.classList.toggle('is-active', active);
+            chip.setAttribute('aria-pressed', String(active));
+        });
+
+        if (empty) {
+            empty.hidden = shown > 0;
+        }
+    };
+
+    // Topic buttons anywhere on the page (chips, the topics table, "show all").
+    document.querySelectorAll('[data-topic-filter]').forEach((button) => {
+        button.addEventListener('click', () => {
+            topic = button.dataset.topicFilter;
+            if (search && !topic) {
+                search.value = '';
+            }
+            apply();
+            if (!section.contains(button) || button.closest('[data-article-empty]')) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    search?.addEventListener('input', apply);
 });

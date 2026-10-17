@@ -1,8 +1,6 @@
 @extends('layouts.site')
 
-@if ($kind === 'services')
-    @section('seo-title', $page['seo_title'])
-@elseif ($kind === 'service' && !empty($page['seo_title']))
+@if (!empty($page['seo_title']))
     @section('seo-title', $page['seo_title'])
 @endif
 

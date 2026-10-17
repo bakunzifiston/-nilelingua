@@ -370,6 +370,13 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
     line-height: 1;
 }
 .nll-theme-toggle:hover { background: var(--nll-sand); }
+/* Language selector */
+.nll-lang-switch { display: inline-flex; align-items: center; }
+.nll-lang-switch-compact { padding: 3px; gap: 2px; border: 1px solid var(--nll-line); border-radius: 999px; background: var(--nll-surface); }
+.nll-lang-switch-compact .nll-lang-option { display: grid; min-width: 36px; height: 32px; padding: 0 10px; place-items: center; border-radius: 999px; color: var(--nll-copy); font-size: 12.5px; font-weight: 700; letter-spacing: .06em; transition: color .2s ease, background-color .2s ease; }
+.nll-lang-switch-compact .nll-lang-option:hover { color: var(--nll-ink); background: var(--nll-sand); }
+.nll-lang-switch-compact .nll-lang-option.is-current { color: #FFFFFF; background: #0F5C52; }
+.nll-lang-switch-menu { display: none; }
 .nll-header-quote { min-height: 42px; padding-inline: 18px; font-size: 14px; box-shadow: none; }
 .nll-menu-toggle { display: none; }
 
@@ -536,6 +543,61 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
 .nll-notice-icon { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; color: #1B1408; background: var(--nll-gold); font-family: var(--serif); font-size: 17px; font-style: italic; font-weight: 700; }
 .nll-notice strong { display: block; margin-bottom: 4px; color: var(--nll-ink); font-size: 15px; }
 .nll-notice p { margin: 0; color: var(--nll-ink); font-size: 15.5px; line-height: 1.65; }
+
+/* --------------------------------------------------------------------------
+   Tool & format cards (homepage tools section, Technology page)
+   -------------------------------------------------------------------------- */
+
+.nll-tools-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.nll-tool-group {
+    display: flex;
+    padding: 28px 24px;
+    flex-direction: column;
+    border: 1px solid var(--nll-line);
+    border-radius: var(--nll-radius);
+    background: var(--nll-surface);
+}
+.nll-tool-icon { width: 44px; height: 44px; border-radius: 12px; }
+.nll-tool-icon svg { width: 22px; height: 22px; }
+.nll-tool-group h3 { min-height: 2.6em; margin: 16px 0 20px; color: var(--nll-ink); font-size: 17px; font-weight: 700; line-height: 1.3; }
+.nll-tool-group .nll-tags + .nll-tags { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--nll-line); }
+@media (max-width: 1024px) {
+    .nll-tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nll-tool-group h3 { min-height: 0; }
+}
+@media (max-width: 600px) {
+    .nll-tools-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .nll-tool-group { padding: 22px 20px; }
+}
+
+/* --------------------------------------------------------------------------
+   Data tables (document content that is genuinely tabular)
+   -------------------------------------------------------------------------- */
+
+.nll-table-wrap { overflow-x: auto; border: 1px solid var(--nll-line); border-radius: var(--nll-radius); background: var(--nll-surface); box-shadow: var(--nll-shadow); }
+.nll-table { width: 100%; border-collapse: collapse; text-align: left; }
+.nll-table th,
+.nll-table td { padding: 18px 22px; border-bottom: 1px solid var(--nll-line); color: var(--nll-copy); font-size: 15.5px; line-height: 1.6; vertical-align: top; }
+.nll-table thead th { color: #FFFFFF; background: var(--nll-navy); font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.nll-table tbody th { color: var(--nll-ink); font-weight: 650; }
+.nll-table tbody tr:last-child > * { border-bottom: 0; }
+.nll-table tbody tr { transition: background-color .15s ease; }
+.nll-table tbody tr:hover { background: color-mix(in srgb, var(--nll-teal) 4%, transparent); }
+
+@media (max-width: 700px) {
+    .nll-table-wrap { overflow: visible; }
+    .nll-table,
+    .nll-table tbody,
+    .nll-table tr { display: block; width: 100%; }
+    .nll-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .nll-table tbody tr { padding: 16px 18px; border-bottom: 1px solid var(--nll-line); }
+    .nll-table tbody tr:last-child { border-bottom: 0; }
+    .nll-table th,
+    .nll-table td { display: block; padding: 0; border: 0; }
+    .nll-table td + td,
+    .nll-table th + td { margin-top: 8px; }
+    .nll-table td[data-label]::before { display: block; margin-bottom: 2px; color: var(--nll-gold-text); content: attr(data-label); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+}
 
 /* --------------------------------------------------------------------------
    Closing call-to-action band (shared by inner pages)
@@ -708,16 +770,20 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
     .nll-nav-dropdown > summary.is-current { color: var(--nll-teal); }
     .nll-dropdown-panel { position: static; width: auto; max-height: none; padding: 6px 0 10px 12px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
     .nll-dropdown-panel a { font-size: 15px; }
+    .nll-lang-switch-menu { display: flex; margin-top: 18px; padding-top: 18px; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid var(--nll-line); }
+    .nll-lang-switch-title { width: 100%; margin-bottom: 4px; color: var(--nll-copy); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .nll-lang-switch-menu .nll-lang-option { display: inline-flex; min-height: 44px; padding: 0 18px; align-items: center; border: 1px solid var(--nll-line); border-radius: 999px; color: var(--nll-ink); font-size: 15px; font-weight: 600; }
+    .nll-lang-switch-menu .nll-lang-option.is-current { border-color: transparent; color: #FFFFFF; background: #0F5C52; }
 }
 
 @media (max-width: 1024px) {
     .nll-footer-main { grid-template-columns: 1fr 1fr; gap: 40px; }
-    .nll-newsletter { grid-template-columns: 1fr; }
+    .nll-newsletter { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 860px) {
     .nll-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
-    .nll-page-hero-grid { min-height: 0; grid-template-columns: 1fr; }
+    .nll-page-hero-grid { min-height: 0; grid-template-columns: minmax(0, 1fr); }
     .nll-page-hero-motif { right: -140px; width: 360px; opacity: .55; }
     .nll-page-hero.is-dark .nll-page-hero-motif { opacity: .35; }
 }
@@ -753,4 +819,9 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
 @media (max-width: 440px) {
     /* Page heroes and the contact link in the menu repeat this call to action */
     .nll-header-quote { display: none; }
+}
+
+@media (max-width: 370px) {
+    /* The menu carries the full language selector on the narrowest phones */
+    .nll-lang-switch-compact { display: none; }
 }
