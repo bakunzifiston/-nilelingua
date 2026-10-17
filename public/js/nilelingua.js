@@ -20,7 +20,7 @@ if (themeToggle) {
         themeToggle.querySelector('span').textContent = isDark ? '☀' : '◐';
 
         if (themeColor) {
-            themeColor.content = isDark ? '#0E1816' : '#FAF7F2';
+            themeColor.content = isDark ? '#0A1518' : '#FBF8F3';
         }
     };
 
@@ -45,10 +45,89 @@ if (menuToggle && navigation) {
         navigation.classList.toggle('is-open', !isExpanded);
     });
 
+    const closeMenu = () => {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        navigation.classList.remove('is-open');
+    };
+
     navigation.addEventListener('click', (event) => {
-        if (event.target instanceof HTMLAnchorElement && window.matchMedia('(max-width: 850px)').matches) {
-            menuToggle.setAttribute('aria-expanded', 'false');
-            navigation.classList.remove('is-open');
+        if (event.target instanceof HTMLAnchorElement && navigation.classList.contains('is-open')) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navigation.classList.contains('is-open')) {
+            closeMenu();
+            menuToggle.focus();
+        }
+    });
+}
+
+// Close open navigation dropdowns when clicking elsewhere or pressing Escape.
+const navDropdowns = document.querySelectorAll('[data-navigation] details');
+
+if (navDropdowns.length) {
+    document.addEventListener('click', (event) => {
+        navDropdowns.forEach((dropdown) => {
+            if (dropdown.open && !dropdown.contains(event.target)) {
+                dropdown.open = false;
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+        navDropdowns.forEach((dropdown) => {
+            if (dropdown.open) {
+                dropdown.open = false;
+                dropdown.querySelector('summary')?.focus();
+            }
+        });
+    });
+}
+
+// Gentle entrance animations for elements marked with data-reveal.
+const revealTargets = document.querySelectorAll('[data-reveal]');
+
+if (revealTargets.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('nll-reveal-ready');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+
+    revealTargets.forEach((target) => revealObserver.observe(target));
+}
+
+// Highlight the table-of-contents entry for the section currently being read.
+const tocLinks = document.querySelectorAll('.nll-toc a[href^="#"]');
+
+if (tocLinks.length && 'IntersectionObserver' in window) {
+    const linkFor = new Map([...tocLinks].map((link) => [link.getAttribute('href').slice(1), link]));
+
+    const tocObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach((link) => link.classList.remove('is-active'));
+                linkFor.get(entry.target.id)?.classList.add('is-active');
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    linkFor.forEach((link, id) => {
+        const section = document.getElementById(id);
+
+        if (section) {
+            tocObserver.observe(section);
         }
     });
 }
