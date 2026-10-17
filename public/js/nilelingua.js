@@ -20,7 +20,7 @@ if (themeToggle) {
         themeToggle.querySelector('span').textContent = isDark ? '☀' : '◐';
 
         if (themeColor) {
-            themeColor.content = isDark ? '#0A1518' : '#FBF8F3';
+            themeColor.content = isDark ? '#0A1518' : '#FFFFFF';
         }
     };
 
@@ -131,3 +131,19 @@ if (tocLinks.length && 'IntersectionObserver' in window) {
         }
     });
 }
+
+// Languages map: highlight a language's map marker and list entry together.
+document.querySelectorAll('[data-language-map]').forEach((map) => {
+    const setActive = (id) => {
+        map.querySelectorAll('[data-map-marker], [data-map-link]').forEach((element) => {
+            const elementId = element.dataset.mapMarker ?? element.dataset.mapLink;
+            element.classList.toggle('is-active', elementId === id);
+        });
+    };
+
+    map.querySelectorAll('[data-map-link], [data-map-marker]').forEach((element) => {
+        const id = element.dataset.mapLink ?? element.dataset.mapMarker;
+        element.addEventListener('mouseenter', () => setActive(id));
+        element.addEventListener('mouseleave', () => setActive(null));
+    });
+});

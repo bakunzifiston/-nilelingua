@@ -9,6 +9,37 @@
         <a class="nll-button nll-button-gold" href="#sectors">Browse sectors <span class="nll-arrow" aria-hidden="true">↓</span></a>
         <a class="nll-button nll-button-ghost" href="/contact">Discuss your project</a>
     </div>
+
+    <x-slot:aside>
+        {{-- The same words in three contexts: a user interface, a contract and a clinical document. --}}
+        <div class="nll-contexts" aria-hidden="true">
+            <div class="nll-context-card nll-context-ui">
+                <span class="nll-context-head"><span class="nll-context-icon"><x-icon name="layers"/></span>User interface</span>
+                <div class="nll-context-screen">
+                    <span class="nll-bar" style="--w: 60%"></span>
+                    <span class="nll-bar" style="--w: 85%"></span>
+                    <span class="nll-context-button">Continue</span>
+                </div>
+            </div>
+
+            <div class="nll-context-card nll-context-legal">
+                <span class="nll-context-head"><span class="nll-context-icon"><x-icon name="scale"/></span>Contract</span>
+                <span class="nll-bar" style="--w: 90%"></span>
+                <span class="nll-bar nll-bar-highlight" style="--w: 55%"></span>
+                <span class="nll-bar" style="--w: 80%"></span>
+                <span class="nll-bar" style="--w: 68%"></span>
+            </div>
+
+            <div class="nll-context-card nll-context-clinical">
+                <span class="nll-context-head"><span class="nll-context-icon"><x-icon name="heart"/></span>Clinical document</span>
+                <span class="nll-bar" style="--w: 84%"></span>
+                <span class="nll-bar" style="--w: 62%"></span>
+                <span class="nll-bar nll-bar-highlight" style="--w: 46%"></span>
+            </div>
+
+            <span class="nll-context-tag">Same words · different weight</span>
+        </div>
+    </x-slot:aside>
 </x-page-hero>
 
 @if (count($cards))

@@ -3,6 +3,13 @@
 return [
     'name' => 'Nilelingua',
     'tagline' => 'Language that moves you forward.',
+    // Social profiles shown in the footer. Paste each full profile URL; icons with an empty URL are hidden.
+    'social' => [
+        'linkedin' => ['label' => 'LinkedIn', 'url' => ''],
+        'facebook' => ['label' => 'Facebook', 'url' => ''],
+        'instagram' => ['label' => 'Instagram', 'url' => ''],
+        'x' => ['label' => 'X (Twitter)', 'url' => ''],
+    ],
     'navigation' => [
         ['label' => 'Home', 'href' => '/'],
         ['label' => 'About', 'href' => '/about'],
@@ -206,20 +213,92 @@ return [
             'intro' => 'Every project is different. Here are some useful first answers; if yours is not here, we would be glad to hear from you.',
         ],
         'privacy-policy' => [
-            'title' => 'Privacy Policy',
-            'meta' => 'Learn what information this website may collect and how a privacy policy should be tailored to your organization.',
-            'keyphrase' => 'privacy policy',
-            'eyebrow' => 'Your information matters',
-            'headline' => 'Privacy Policy',
-            'intro' => 'This starter policy is a general draft for the Nilelingua website. It must be reviewed and adapted to reflect the actual business, tools, jurisdictions and data practices before publication.',
-            'notice' => 'Draft for review: confirm the data controller, contact details, cookies, analytics, retention periods, processors and applicable legal requirements before using this policy as a final notice.',
+            'title' => 'Privacy & Data Protection Policy',
+            'meta' => 'How Nile Lingua Lab protects client files, personal data and confidentiality, in line with Rwanda’s Law No. 058/2021 and the GDPR.',
+            'keyphrase' => 'privacy and data protection policy',
+            'eyebrow' => 'Confidentiality & data protection',
+            'headline' => 'Privacy & Data Protection Policy',
+            'effective_date' => 'October 2026',
+            'company' => 'Nile Lingua Lab Ltd, Kicukiro, Kigali, Rwanda',
+            // Each section may use: paragraphs, items (with optional label), subsections and a closing note.
             'sections' => [
-                ['heading' => 'Information you choose to provide', 'body' => 'If you use a contact or enquiry form, the website may receive the details you enter, such as your name, work email address and project description. Avoid including confidential documents or sensitive personal information in an initial enquiry.'],
-                ['heading' => 'How information may be used', 'body' => 'Information submitted through the enquiry form is stored in the application database so the site owner can review and respond to your request. The site owner should confirm who can access enquiries and whether information is shared with service providers.'],
-                ['heading' => 'Cookies and technical information', 'body' => 'Web servers and hosting providers may process technical information needed to deliver and protect a website. Any analytics, advertising cookies or additional tracking must be documented here if they are used.'],
-                ['heading' => 'Retention and security', 'body' => 'The site owner should set and document appropriate retention periods and security measures based on the actual systems and obligations that apply. No website can promise absolute security.'],
-                ['heading' => 'Your choices and rights', 'body' => 'Depending on where you live, you may have rights regarding personal information. The site owner should provide a valid contact route and explain how relevant requests can be made.'],
-                ['heading' => 'Contact and updates', 'body' => 'Add the organization’s verified privacy contact details and the date this notice takes effect. Update this policy when data practices change.'],
+                [
+                    'heading' => 'Our Commitment to Confidentiality',
+                    'paragraphs' => [
+                        'At Nile Lingua Lab (NLL), we treat privacy and confidentiality as part of the job. We regularly handle sensitive material, including legal documents, research recordings, software files and AI training data. We take reasonable steps to keep your files, personal data and translated material confidential and protected from unauthorized access, loss or disclosure.',
+                    ],
+                ],
+                [
+                    'heading' => 'No Public AI Training',
+                    'paragraphs' => [
+                        'Your source files, translation memories, glossaries and finished work are never used to train public AI tools.',
+                        'We do not upload client material to public AI services or third-party model training pipelines.',
+                    ],
+                ],
+                [
+                    'heading' => 'NDAs & Staff Access',
+                    'items' => [
+                        ['label' => 'Signed NDAs', 'text' => 'Everyone who works on your project (project managers, translators, editors, reviewers) signs a non-disclosure agreement before receiving files.'],
+                        ['label' => 'Need-to-know access', 'text' => 'Only the people assigned to your project can see your files.'],
+                        ['label' => 'Your NDA', 'text' => 'We are happy to sign your own NDA or master service agreement before you share documents.'],
+                    ],
+                ],
+                [
+                    'heading' => 'How We Protect Your Data',
+                    'paragraphs' => ['We use practical safeguards to keep your files secure:'],
+                    'items' => [
+                        ['label' => 'Secure file transfer', 'text' => 'Files are shared through encrypted channels, including our website’s secure upload.'],
+                        ['label' => 'Restricted access', 'text' => 'Project files are accessible only to assigned staff.'],
+                        ['label' => 'Careful storage', 'text' => 'We store project files on protected devices and accounts.'],
+                        ['label' => 'Deletion on request', 'text' => 'You can ask us to delete your files at any time (see Section 8).'],
+                    ],
+                    'note' => 'No online system can be guaranteed completely secure, but we work to protect your information and act promptly if a problem arises.',
+                ],
+                [
+                    'heading' => 'Information We Collect',
+                    'subsections' => [
+                        ['heading' => 'Quote requests and inquiries', 'body' => 'Name, work email, phone or WhatsApp number (if provided), organization, service needed, languages, project details and any files you upload.'],
+                        ['heading' => 'Job and linguist applications', 'body' => 'Name, email, phone or WhatsApp (if provided), location, languages, expertise, tools used, CV and portfolio, and the results of any sample task.'],
+                        ['heading' => 'Newsletter sign-ups', 'body' => 'Your email address, if you subscribe to our updates.'],
+                        ['heading' => 'Website usage data', 'body' => 'Basic technical data such as IP address, browser type and approximate location. An IP address is personal data, and we use it only to keep the site working and understand how it is used.'],
+                    ],
+                ],
+                [
+                    'heading' => 'How We Use Your Information',
+                    'items' => [
+                        ['text' => 'To review your project, provide a scope and quote, and carry out the work.'],
+                        ['text' => 'To communicate about active projects and answer your questions.'],
+                        ['text' => 'To assess linguist applications and manage our freelance network.'],
+                        ['text' => 'To send updates, only if you have subscribed. You can unsubscribe at any time.'],
+                        ['text' => 'To meet tax, invoicing and legal obligations in Rwanda.'],
+                        ['text' => 'To maintain and improve our website.'],
+                    ],
+                    'note' => 'We do not sell, rent or trade your personal data or client information to advertisers or data brokers.',
+                ],
+                [
+                    'heading' => 'Cookies',
+                    // To complete before publishing in full: list the actual cookies or analytics tool used, and whether a consent banner is shown.
+                    'paragraphs' => [
+                        'Our website may use cookies and similar tools to run properly and to understand how visitors use the site.',
+                        'You can block or delete cookies in your browser settings. Some site features may work less smoothly if you do.',
+                    ],
+                ],
+                [
+                    'heading' => 'How Long We Keep Information, and Your Choices',
+                    'items' => [
+                        ['label' => 'Project files', 'text' => 'We keep them only as long as needed to complete the project and handle follow-up questions, unless we agree a different period in writing. You can ask us to delete your files at any time.'],
+                        ['label' => 'Translation memories and glossaries', 'text' => 'We keep these for your future projects so that terminology stays consistent and you benefit from repeat-content savings. Ask us to delete them whenever you wish.'],
+                        ['label' => 'Business records', 'text' => 'We keep invoices and contracts as long as the law requires.'],
+                        ['label' => 'Applications', 'text' => 'We keep applicant details while we consider you for projects, and you can ask us to remove them.'],
+                        ['label' => 'Your rights', 'text' => 'You can ask to see, correct or delete your personal data, or withdraw consent, by contacting us below.'],
+                    ],
+                ],
+                [
+                    'heading' => 'Legal Framework',
+                    'paragraphs' => [
+                        'We handle personal data in line with Rwanda’s Law No. 058/2021 on the protection of personal data and privacy. Where relevant for clients in the European Union or elsewhere, we also take account of the General Data Protection Regulation (GDPR).',
+                    ],
+                ],
             ],
         ],
     ],

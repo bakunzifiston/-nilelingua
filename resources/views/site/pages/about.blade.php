@@ -1,5 +1,6 @@
 @php
     $principleIcons = ['compass', 'cpu', 'message'];
+    $storyIcons = ['layers', 'globe', 'people'];
 @endphp
 
 <x-page-hero :title="$page['headline']" :current="$page['title']" :eyebrow="$page['eyebrow']">
@@ -9,6 +10,39 @@
         <span><x-icon name="people"/> Native-speaker review</span>
         <span><x-icon name="lock"/> Strict confidentiality</span>
     </div>
+
+    <x-slot:aside>
+        {{-- "Listening" illustration: a voice at the centre, the client's brief and our first question. --}}
+        <div class="nll-listen" aria-hidden="true">
+            <span class="nll-listen-ring nll-listen-ring-1"></span>
+            <span class="nll-listen-ring nll-listen-ring-2"></span>
+            <span class="nll-listen-ring nll-listen-ring-3"></span>
+
+            <div class="nll-listen-core">
+                <span class="nll-wave">
+                    @foreach ([10, 18, 28, 16, 34, 22, 40, 24, 32, 14, 26, 18, 10] as $bar)
+                        <i style="--h: {{ $bar }}px"></i>
+                    @endforeach
+                </span>
+            </div>
+
+            <div class="nll-listen-bubble nll-listen-brief">
+                <span class="nll-listen-label">Your brief</span>
+                <span class="nll-bar" style="--w: 92%"></span>
+                <span class="nll-bar" style="--w: 70%"></span>
+                <span class="nll-bar" style="--w: 80%"></span>
+            </div>
+
+            <div class="nll-listen-bubble nll-listen-question">
+                <span class="nll-listen-label">Our first question</span>
+                <b>Who is this for?</b>
+            </div>
+
+            <span class="nll-listen-tag nll-listen-tag-1">Audience</span>
+            <span class="nll-listen-tag nll-listen-tag-2">Context</span>
+            <span class="nll-listen-tag nll-listen-tag-3">Tone</span>
+        </div>
+    </x-slot:aside>
 </x-page-hero>
 
 @if (!empty($page['sections']))
@@ -21,7 +55,7 @@
             <div class="nll-story-rows">
                 @foreach ($page['sections'] as $section)
                     <article class="nll-story-row" data-reveal>
-                        <span class="nll-story-index" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                        <span class="nll-icon nll-story-icon"><x-icon :name="$storyIcons[$loop->index] ?? 'sparkle'"/></span>
                         <h3>{{ $section['heading'] }}</h3>
                         <p>{{ $section['body'] }}</p>
                     </article>

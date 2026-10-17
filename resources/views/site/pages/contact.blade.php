@@ -1,5 +1,28 @@
 <x-page-hero compact :title="$page['headline']" :current="$page['title']" :eyebrow="$page['eyebrow']">
     <p class="nll-lead">{{ $page['intro'] }}</p>
+
+    <x-slot:aside>
+        {{-- A first conversation: the client shares the basics, we ask for a little more. --}}
+        <div class="nll-chat" aria-hidden="true">
+            <div class="nll-chat-bubble nll-chat-in">
+                <span class="nll-chat-label">Your project</span>
+                <span class="nll-chat-tags"><i>Content</i><i>Languages</i><i>Timing</i></span>
+            </div>
+
+            <div class="nll-chat-bubble nll-chat-out">
+                <span class="nll-chat-label"><span class="nll-brand-mark">n.</span> Nile Lingua Lab</span>
+                <b>Tell us a little more.</b>
+            </div>
+
+            <div class="nll-chat-bubble nll-chat-typing"><i></i><i></i><i></i></div>
+
+            <div class="nll-chat-channels">
+                <span><x-icon name="mail"/></span>
+                <span><x-icon name="whatsapp"/></span>
+                <span><x-icon name="phone"/></span>
+            </div>
+        </div>
+    </x-slot:aside>
 </x-page-hero>
 
 <section class="nll-section nll-section-tight" aria-labelledby="contact-form-title">

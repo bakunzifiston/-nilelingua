@@ -10,6 +10,42 @@
     <div class="nll-actions">
         <a class="nll-button nll-button-gold" href="/contact">Introduce yourself <span class="nll-arrow" aria-hidden="true">→</span></a>
     </div>
+
+    <x-slot:aside>
+        {{-- A network of language professionals around Nile Lingua Lab, one card per profile on this page. --}}
+        <div class="nll-network" aria-hidden="true">
+            <svg class="nll-network-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M50 50 28 14M50 50 79 50M50 50 30 86"/>
+            </svg>
+
+            <span class="nll-network-hub">
+                <span class="nll-network-pulse"></span>
+                <span class="nll-brand-mark">n.</span>
+            </span>
+
+            <div class="nll-profile nll-profile-1">
+                <span class="nll-profile-avatar"><x-icon name="message"/></span>
+                <div>
+                    <b>Linguists &amp; reviewers</b>
+                    <span class="nll-profile-tags"><i>Language pairs</i><i>Subject areas</i></span>
+                </div>
+            </div>
+            <div class="nll-profile nll-profile-2">
+                <span class="nll-profile-avatar"><x-icon name="film"/></span>
+                <div>
+                    <b>Media specialists</b>
+                    <span class="nll-profile-tags"><i>Subtitling</i><i>Accessibility</i></span>
+                </div>
+            </div>
+            <div class="nll-profile nll-profile-3">
+                <span class="nll-profile-avatar"><x-icon name="workflow"/></span>
+                <div>
+                    <b>Project &amp; language operations</b>
+                    <span class="nll-profile-tags"><i>Coordination</i></span>
+                </div>
+            </div>
+        </div>
+    </x-slot:aside>
 </x-page-hero>
 
 @if ($status)

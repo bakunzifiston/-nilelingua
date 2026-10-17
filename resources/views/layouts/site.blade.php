@@ -7,7 +7,7 @@
     @if (!empty($page['keyphrase']))
         <meta name="keywords" content="{{ $page['keyphrase'] }}">
     @endif
-    <meta name="theme-color" content="#FBF8F3">
+    <meta name="theme-color" content="#FFFFFF">
     @hasSection('seo-title')
         <title>@yield('seo-title')</title>
     @else

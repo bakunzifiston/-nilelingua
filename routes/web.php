@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
+use App\Models\NewsletterSubscriber;
 use App\Models\ProjectEnquiry;
 
 Route::get('/', fn () => view('site.home', [
@@ -107,6 +109,27 @@ Route::post('/contact', function (Request $request) {
 
     return redirect('/thank-you')->with('enquiry_submitted', true);
 })->name('contact.submit');
+
+Route::post('/newsletter', function (Request $request) {
+    // Hidden honeypot field: real visitors leave it empty, simple bots fill it in.
+    if ($request->filled('website')) {
+        return redirect()->to(url()->previous().'#newsletter');
+    }
+
+    $validator = Validator::make($request->only('email'), [
+        'email' => ['required', 'email', 'max:255'],
+    ]);
+
+    // Return to the footer form (not the top of the page) so the message is visible.
+    if ($validator->fails()) {
+        return redirect()->to(url()->previous().'#newsletter')->withErrors($validator, 'newsletter')->withInput();
+    }
+
+    $subscriber = NewsletterSubscriber::firstOrCreate(['email' => strtolower(trim($validator->validated()['email']))]);
+
+    return redirect()->to(url()->previous().'#newsletter')
+        ->with('newsletter_status', $subscriber->wasRecentlyCreated ? 'subscribed' : 'already');
+})->name('newsletter.subscribe')->middleware('throttle:6,1');
 
 Route::get('/thank-you', fn () => view('site.thank-you'));
 

@@ -84,6 +84,18 @@
         @case('sparkle')
             <path d="M12 3.5 13.8 10 20.5 12l-6.7 2-1.8 6.5-1.8-6.5L3.5 12l6.7-2L12 3.5Z"/>
             @break
+        @case('linkedin')
+            <rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5V16M8 7.8v.1M11.5 16v-5.5M11.5 13c0-1.6 1-2.6 2.4-2.6s2.1.9 2.1 2.6V16"/>
+            @break
+        @case('facebook')
+            <path d="M14.5 8.5h2V5h-2.5A3.5 3.5 0 0 0 10.5 8.5V11h-2v3.5h2V21H14v-6.5h2.5l.5-3.5h-3V9a.5.5 0 0 1 .5-.5Z"/>
+            @break
+        @case('instagram')
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h.01"/>
+            @break
+        @case('x')
+            <path d="M4.5 4.5h4l11 15h-4l-11-15Z"/><path d="M19 4.5 13.4 10.8M5 19.5l5.6-6.3"/>
+            @break
         @default
             <circle cx="12" cy="12" r="8.5"/>
     @endswitch
