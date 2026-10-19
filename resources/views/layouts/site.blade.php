@@ -19,10 +19,10 @@
     @endforeach
     <link rel="alternate" hreflang="x-default" href="{{ url(\App\Support\Localization::switchUrl(\App\Support\Localization::DEFAULT)) }}">
     <meta property="og:locale" content="{{ \App\Support\Localization::LOCALES[$locale]['og'] }}">
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+    <link rel="icon" href="{{ \App\Support\VersionedAsset::url('favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/site.css') }}">
     @yield('page-styles')
-    <script src="{{ asset('js/nilelingua.js') }}" defer></script>
+    <script src="{{ \App\Support\VersionedAsset::url('js/nilelingua.js') }}" defer></script>
 </head>
 <body class="@yield('body-class')">
     <a class="nll-skip-link" href="#main">{{ __('Skip to content') }}</a>

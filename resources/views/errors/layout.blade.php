@@ -12,8 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>{{ $text['title'] }} | Nile Lingua Lab</title>
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+    <link rel="icon" href="{{ \App\Support\VersionedAsset::url('favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/site.css') }}">
     <style>
         .nll-error { display: grid; min-height: 100vh; padding: 32px 16px; place-items: center; color: var(--nll-on-dark); background: radial-gradient(800px 420px at 85% -10%, rgb(73 179 160 / 20%), transparent 60%), var(--nll-navy); }
         .nll-error-card { width: min(560px, 100%); text-align: center; }

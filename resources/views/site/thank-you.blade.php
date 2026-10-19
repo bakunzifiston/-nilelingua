@@ -3,7 +3,7 @@
 @section('body-class', 'nll-page nll-page-thank-you')
 
 @section('page-styles')
-    <link rel="stylesheet" href="{{ asset('css/pages.css') }}">
+    <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/pages.css') }}">
 @endsection
 
 @section('content')

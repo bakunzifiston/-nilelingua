@@ -4,7 +4,7 @@
 @section('body-class', 'home-page')
 
 @section('page-styles')
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/home.css') }}">
 @endsection
 
 @php

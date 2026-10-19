@@ -6,9 +6,9 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') · Nile Lingua Lab admin</title>
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <script src="{{ asset('js/admin.js') }}" defer></script>
+    <link rel="icon" href="{{ \App\Support\VersionedAsset::url('favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/admin.css') }}">
+    <script src="{{ \App\Support\VersionedAsset::url('js/admin.js') }}" defer></script>
 </head>
 <body>
     <a class="a-skip" href="#admin-main">Skip to content</a>
