@@ -22,7 +22,7 @@
             </svg>
             <span class="nll-network-hub">
                 <span class="nll-network-pulse"></span>
-                <span class="nll-brand-mark">n.</span>
+                <span class="nll-brand-mark" aria-hidden="true"><x-logo-mark/></span>
             </span>
             <div class="nll-profile nll-profile-1">
                 <span class="nll-profile-avatar"><x-icon name="document"/></span>

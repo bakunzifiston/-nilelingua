@@ -285,20 +285,19 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
     align-items: center;
     gap: 24px;
 }
-.nll-brand { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 10px; font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
-.nll-brand-mark {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    place-items: center;
-    border-radius: 50%;
-    color: #FFFFFF;
-    background: #0F5C52;
-    font-family: var(--serif);
-    font-size: 19px;
-    font-style: italic;
-}
-.nll-brand-period { color: var(--nll-gold); }
+.nll-brand { flex: 0 0 auto; }
+.nll-logo { display: inline-flex; align-items: center; gap: 11px; color: var(--nll-ink); text-decoration: none; }
+.nll-logo-mark { display: block; width: 40px; height: 40px; flex: none; border-radius: 12px; transition: transform .25s var(--nll-ease); }
+.nll-logo:hover .nll-logo-mark { transform: rotate(-4deg) scale(1.04); }
+.nll-logo-text { display: grid; line-height: 1; }
+.nll-logo-name { font-family: var(--serif); font-size: 20px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+.nll-logo-sub { display: flex; margin-top: 5px; align-items: center; gap: 7px; color: var(--nll-gold-text); font-family: var(--sans); font-size: 9.5px; font-weight: 800; letter-spacing: .34em; text-transform: uppercase; }
+.nll-logo-sub::before { width: 16px; height: 1.5px; background: currentColor; opacity: .75; content: ""; }
+.nll-logo-dark { color: #FFFFFF; }
+.nll-logo-dark .nll-logo-sub { color: var(--nll-gold); }
+/* The mark used on its own (avatars, chat bubbles, bylines). */
+.nll-brand-mark { display: grid; width: 36px; height: 36px; flex: none; place-items: center; border-radius: 30%; }
+.nll-brand-mark .nll-logo-mark { width: 100%; height: 100%; border-radius: inherit; }
 
 .nll-nav { display: flex; margin-left: auto; align-items: center; gap: clamp(14px, 1.5vw, 24px); }
 .nll-nav > a,
@@ -650,8 +649,6 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
 
 .nll-footer { padding-top: clamp(56px, 7vw, 80px); color: var(--nll-on-dark); background: var(--nll-navy-deep); }
 .nll-footer-main { display: grid; padding-bottom: 48px; grid-template-columns: 1.5fr .8fr .8fr 1.3fr; gap: 48px; }
-.nll-brand-footer { color: #FFFFFF; }
-.nll-brand-footer .nll-brand-mark { color: var(--nll-navy-deep); background: var(--nll-gold); }
 .nll-footer-brand > p { max-width: 28ch; margin: 18px 0 14px; color: #D3DEDB; font-family: var(--serif); font-size: 19px; line-height: 1.45; }
 .nll-footer-assurance { display: inline-flex; padding: 6px 12px; border: 1px solid var(--nll-dark-line); border-radius: 8px; color: #A9BCBD; font-size: 13px; }
 .nll-footer-column,
@@ -790,8 +787,10 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
 
 @media (max-width: 600px) {
     .nll-header-inner { min-height: 64px; }
-    .nll-brand { gap: 8px; font-size: 15px; }
-    .nll-brand-mark { width: 32px; height: 32px; font-size: 17px; }
+    .nll-logo { gap: 9px; }
+    .nll-logo-mark { width: 34px; height: 34px; border-radius: 10px; }
+    .nll-logo-name { font-size: 17.5px; }
+    .nll-logo-sub { margin-top: 4px; font-size: 8.5px; }
     .nll-header-actions { gap: 8px; }
     .nll-header-quote { min-height: 40px; padding-inline: 12px; font-size: 13px; }
     .nll-menu-toggle { width: 40px; height: 40px; }
@@ -825,3 +824,4 @@ a:focus-visible .nll-arrow { transform: translateX(4px); }
     /* The menu carries the full language selector on the narrowest phones */
     .nll-lang-switch-compact { display: none; }
 }
+.nll-logo-dark .nll-logo-mark { box-shadow: 0 0 0 1px rgb(255 255 255 / 16%); }

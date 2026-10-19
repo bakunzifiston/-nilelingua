@@ -29,7 +29,7 @@
                 <span class="nll-chat-tags"><i>{{ __('Content') }}</i><i>{{ __('Languages') }}</i><i>{{ __('Deadline') }}</i></span>
             </div>
             <div class="nll-chat-bubble nll-chat-out">
-                <span class="nll-chat-label"><span class="nll-brand-mark">n.</span> Nile Lingua Lab</span>
+                <span class="nll-chat-label"><span class="nll-brand-mark" aria-hidden="true"><x-logo-mark/></span> Nile Lingua Lab</span>
                 <b>{{ __('Here is your clear quote.') }}</b>
             </div>
             <div class="nll-chat-bubble nll-chat-typing"><i></i><i></i><i></i></div>

@@ -1,0 +1,6 @@
+{{-- Nile Lingua Lab mark: an "N" drawn as a flowing river line, with a gold accent. --}}
+<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false" {{ $attributes->merge(['class' => 'nll-logo-mark']) }}>
+    <rect width="40" height="40" rx="12" fill="#0F5C52"/>
+    <path d="M12 28V14.8c0-3.2 4.1-4.3 5.8-1.6L23 25.4c1.7 2.7 5.8 1.6 5.8-1.6V13.6" fill="none" stroke="#FFFFFF" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="28.8" cy="7.4" r="2.5" fill="#E0A84F"/>
+</svg>

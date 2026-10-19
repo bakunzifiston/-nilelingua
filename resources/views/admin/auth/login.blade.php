@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>Sign in · Nile Lingua Lab admin</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 </head>
 <body>
     <main class="a-auth">
         <div class="a-auth-card">
             <div class="a-brand">
-                <span class="a-brand-mark" aria-hidden="true">n.</span>
+                <x-logo-mark class="a-brand-mark"/>
                 <span>Nile Lingua Lab<small>Content dashboard</small></span>
             </div>
             <h1>Sign in</h1>

@@ -234,7 +234,7 @@
 .nll-network-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .nll-network-lines path { fill: none; stroke: rgb(224 168 79 / 45%); stroke-dasharray: 3 5; stroke-linecap: round; stroke-width: 1.4; vector-effect: non-scaling-stroke; }
 .nll-network-hub { position: absolute; top: 50%; left: 50%; display: grid; place-items: center; transform: translate(-50%, -50%); }
-.nll-network-hub .nll-brand-mark { position: relative; width: 64px; height: 64px; color: #1B1408; background: var(--nll-gold); box-shadow: 0 0 0 10px rgb(224 168 79 / 12%), 0 20px 40px -12px rgb(0 0 0 / 60%); font-size: 30px; }
+.nll-network-hub .nll-brand-mark { position: relative; width: 64px; height: 64px; box-shadow: 0 0 0 10px rgb(224 168 79 / 12%), 0 20px 40px -12px rgb(0 0 0 / 60%); font-size: 30px; }
 .nll-network-pulse { position: absolute; width: 64px; height: 64px; border: 1.5px solid var(--nll-gold); border-radius: 50%; animation: nll-pulse 3.2s ease-out infinite; }
 .nll-profile {
     position: absolute;
@@ -298,7 +298,7 @@
     animation: nll-float 9s ease-in-out infinite;
 }
 .nll-chat-label { display: flex; align-items: center; gap: 8px; color: #9FB4B6; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.nll-chat-label .nll-brand-mark { width: 22px; height: 22px; color: #1B1408; background: var(--nll-gold); font-size: 12px; letter-spacing: 0; text-transform: none; }
+.nll-chat-label .nll-brand-mark { width: 22px; height: 22px; }
 .nll-chat-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .nll-chat-tags i { padding: 4px 10px; border: 1px solid rgb(73 179 160 / 40%); border-radius: 999px; color: #DCEFEA; background: rgb(73 179 160 / 12%); font-size: 12.5px; font-style: normal; font-weight: 600; }
 .nll-chat-in { top: 0; left: 0; width: 66%; border-radius: 18px 18px 18px 4px; --tilt: perspective(900px) rotateY(8deg); transform: var(--tilt); }

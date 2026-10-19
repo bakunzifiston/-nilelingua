@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex">
     <title>{{ $text['title'] }} | Nile Lingua Lab</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ asset('css/site.css') }}">
     <style>
         .nll-error { display: grid; min-height: 100vh; padding: 32px 16px; place-items: center; color: var(--nll-on-dark); background: radial-gradient(800px 420px at 85% -10%, rgb(73 179 160 / 20%), transparent 60%), var(--nll-navy); }
@@ -26,7 +27,7 @@
 <body>
     <main class="nll-error">
         <div class="nll-error-card">
-            <a class="nll-error-brand" href="{{ $home }}"><span class="nll-brand-mark" aria-hidden="true">n.</span> Nile Lingua Lab</a>
+            <x-logo class="nll-error-brand" :href="$home" tone="dark" :label="$fr ? 'Accueil Nile Lingua Lab' : 'Nile Lingua Lab home'"/>
             <span class="nll-error-code" aria-hidden="true">{{ $code }}</span>
             <h1>{{ $text['title'] }}</h1>
             <p>{{ $text['body'] }}</p>

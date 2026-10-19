@@ -37,7 +37,7 @@
 <x-page-hero class="nll-article-hero" :title="$page['headline']" :current="$page['title']" :eyebrow="$page['category']" :motif="false"
              :crumbs="[['label' => __('Knowledge Center'), 'href' => '/knowledge-center']]">
     <div class="nll-article-byline">
-        <span class="nll-brand-mark" aria-hidden="true">n.</span>
+        <span class="nll-brand-mark" aria-hidden="true"><x-logo-mark/></span>
         <span>
             <strong>{{ __('By Nile Lingua Lab') }} • {{ $page['category'] }} • {{ $page['read_time'] }}</strong>
             <span>{{ __('Published :date', ['date' => $page['published']]) }} · {{ __('Last updated :date', ['date' => $page['updated']]) }}</span>

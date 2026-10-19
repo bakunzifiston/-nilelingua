@@ -43,10 +43,7 @@
 
         <div class="nll-footer-main">
             <div class="nll-footer-brand">
-                <a class="nll-brand nll-brand-footer" href="/" aria-label="{{ __('Nile Lingua Lab home') }}">
-                    <span class="nll-brand-mark" aria-hidden="true">n.</span>
-                    <span>Nile Lingua Lab<span class="nll-brand-period">.</span></span>
-                </a>
+                <x-logo class="nll-brand nll-brand-footer" tone="dark"/>
                 <p>{{ __('African language services from Kigali, Rwanda.') }}</p>
                 <span class="nll-footer-assurance">{{ __('Native-speaker review · Strict confidentiality') }}</span>
 

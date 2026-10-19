@@ -54,7 +54,8 @@ h1, h2, h3 { margin: 0; line-height: 1.2; }
 .a-sidebar { position: sticky; top: 0; display: flex; height: 100vh; flex-direction: column; overflow-y: auto; color: var(--a-on-dark); background: var(--a-navy); scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / 18%) transparent; }
 .a-brand { display: flex; padding: 22px 22px 18px; align-items: center; gap: 12px; color: var(--a-on-dark); font-size: 16px; font-weight: 700; text-decoration: none; }
 .a-brand:hover { color: #fff; }
-.a-brand-mark { display: grid; width: 36px; height: 36px; flex: none; place-items: center; border-radius: 50%; color: #fff; background: var(--a-teal); font-family: var(--serif); font-size: 18px; font-style: italic; }
+.a-brand-mark { display: block; width: 38px; height: 38px; flex: none; border-radius: 11px; }
+.a-sidebar .a-brand-mark { box-shadow: 0 0 0 1px rgb(255 255 255 / 16%); }
 .a-brand small { display: block; color: var(--a-on-dark-muted); font-size: 12px; font-weight: 500; letter-spacing: .02em; }
 .a-nav { padding: 4px 12px 24px; }
 .a-nav-group + .a-nav-group { margin-top: 18px; }

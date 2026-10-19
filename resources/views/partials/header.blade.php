@@ -7,10 +7,7 @@
 
 <header class="nll-header">
     <div class="nll-header-inner">
-        <a class="nll-brand" href="/" aria-label="{{ __('Nile Lingua Lab home') }}">
-            <span class="nll-brand-mark" aria-hidden="true">n.</span>
-            <span>Nile Lingua Lab<span class="nll-brand-period">.</span></span>
-        </a>
+        <x-logo class="nll-brand"/>
 
         <nav class="nll-nav" id="site-navigation" aria-label="{{ __('Main navigation') }}" data-navigation>
             @foreach (config('site.navigation') as $item)

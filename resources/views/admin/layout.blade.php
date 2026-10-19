@@ -6,6 +6,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') · Nile Lingua Lab admin</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <script src="{{ asset('js/admin.js') }}" defer></script>
 </head>
@@ -15,7 +16,7 @@
     <div class="a-shell" data-shell>
         <aside class="a-sidebar" id="admin-sidebar" aria-label="Dashboard menu">
             <a class="a-brand" href="{{ route('admin.dashboard') }}">
-                <span class="a-brand-mark" aria-hidden="true">n.</span>
+                <x-logo-mark class="a-brand-mark"/>
                 <span>Nile Lingua Lab<small>Content dashboard</small></span>
             </a>
 
