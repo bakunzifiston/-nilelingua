@@ -268,7 +268,8 @@ class AdminCmsTest extends TestCase
         $this->actingAs($this->admin);
         $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('fake.svg', 'not an svg')])->assertSessionHasErrors('file');
         $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('fake.png', '<?php echo 1;')])->assertSessionHasErrors('file');
-        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('bomb.svg', '<!DOCTYPE svg [<!ENTITY a "aaaa">]><svg xmlns="http://www.w3.org/2000/svg">&a;</svg>')])->assertSessionHasErrors('file');
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('xxe.svg', '<!DOCTYPE svg [<!ENTITY x SYSTEM "file:///etc/passwd">]><svg xmlns="http://www.w3.org/2000/svg"><text>&x;</text></svg>')])->assertSessionHasErrors('file');
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('bomb.svg', '<!DOCTYPE svg [<!ENTITY a "aaaa"><!ENTITY b "&a;&a;&a;">]><svg xmlns="http://www.w3.org/2000/svg">&b;</svg>')])->assertSessionHasErrors('file');
         $this->assertSame(0, Media::count());
 
         // A real PNG is still accepted.
@@ -276,5 +277,27 @@ class AdminCmsTest extends TestCase
         $media = Media::firstOrFail();
         File::delete(public_path($media->path));
         $this->assertSame([40, 40], [$media->width, $media->height]);
+    }
+
+    public function test_illustrator_svg_keeps_its_artwork(): void
+    {
+        $svg = '<?xml version="1.0" encoding="utf-8"?>'
+            .'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" ['
+            .'<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/"><!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">]>'
+            .'<svg xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">'
+            .'<switch><foreignObject requiredExtensions="&ns_ai;"><i:aipgfRef/></foreignObject>'
+            .'<g i:extraneous="self"><rect width="200" height="100" fill="#0F5C52"/></g></switch></svg>';
+
+        $this->actingAs($this->admin)
+            ->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('logo.svg', $svg)])
+            ->assertSessionHasNoErrors();
+
+        $media = Media::latest('id')->firstOrFail();
+        $saved = file_get_contents(public_path($media->path));
+        File::delete(public_path($media->path));
+
+        $this->assertStringContainsString('<rect', $saved);
+        $this->assertStringNotContainsString('foreignObject', $saved);
+        $this->assertSame([200, 100], [$media->width, $media->height]);
     }
 }

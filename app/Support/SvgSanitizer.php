@@ -24,13 +24,51 @@ class SvgSanitizer
         'image',
     ];
 
+    /** Removed together with everything inside them. */
+    private const DANGEROUS = [
+        'script', 'foreignobject', 'iframe', 'object', 'embed', 'audio', 'video', 'canvas',
+        'html', 'body', 'handler', 'listener', 'animate', 'animatemotion', 'animatetransform',
+        'animatecolor', 'set', 'discard',
+    ];
+
+    /**
+     * Design tools (notably Illustrator) add a DOCTYPE with a few plain text entities such as
+     * &ns_ai;. Those are replaced by their text and the DOCTYPE dropped; anything else
+     * (external or nested entities) is refused.
+     */
+    private static function resolveDoctype(string $svg): ?string
+    {
+        if (! preg_match('/<!DOCTYPE\b/i', $svg)) {
+            return preg_match('/<!ENTITY\b/i', $svg) ? null : $svg;
+        }
+        if (! preg_match('/<!DOCTYPE[^\[>]*(\[(.*?)\])?\s*>/is', $svg, $doctype)) {
+            return null;
+        }
+
+        $entities = [];
+        $subset = $doctype[2] ?? '';
+        preg_match_all('/<!ENTITY\s+([A-Za-z_][\w.-]*)\s+"([^"&%<]*)"\s*>/', $subset, $found, PREG_SET_ORDER);
+        foreach ($found as [$whole, $name, $value]) {
+            $entities['&'.$name.';'] = htmlspecialchars($value, ENT_QUOTES | ENT_XML1);
+            $subset = str_replace($whole, '', $subset);
+        }
+        // Anything left in the internal subset (external entities, parameter entities…) is not allowed.
+        if (trim(preg_replace('/<!--.*?-->/s', '', $subset)) !== '') {
+            return null;
+        }
+
+        $svg = str_replace($doctype[0], '', $svg);
+
+        return strtr($svg, $entities);
+    }
+
     /**
      * Returns the cleaned SVG markup, or null when the file is not a usable SVG image.
      */
     public static function clean(string $svg): ?string
     {
-        // Entity declarations are never needed in an image and can be abused.
-        if ($svg === '' || preg_match('/<!(DOCTYPE|ENTITY)/i', $svg)) {
+        $svg = self::resolveDoctype($svg);
+        if ($svg === null || trim($svg) === '') {
             return null;
         }
 
@@ -54,7 +92,8 @@ class SvgSanitizer
     public static function dimensions(string $svg): array
     {
         $document = new DOMDocument;
-        if (! @$document->loadXML($svg, LIBXML_NONET | LIBXML_PARSEHUGE) || ! $document->documentElement) {
+        $svg = self::resolveDoctype($svg) ?? '';
+        if ($svg === '' || ! @$document->loadXML($svg, LIBXML_NONET | LIBXML_PARSEHUGE) || ! $document->documentElement) {
             return [null, null];
         }
         $root = $document->documentElement;
@@ -71,7 +110,18 @@ class SvgSanitizer
     {
         foreach (iterator_to_array($node->childNodes) as $child) {
             if ($child instanceof DOMElement) {
-                if (! in_array(strtolower($child->localName), self::ELEMENTS, true)) {
+                $tag = strtolower($child->localName);
+                if (in_array($tag, self::DANGEROUS, true)) {
+                    $node->removeChild($child);
+
+                    continue;
+                }
+                if (! in_array($tag, self::ELEMENTS, true)) {
+                    // Unknown wrappers (Illustrator's <switch>, links, editor groups): keep the artwork inside.
+                    self::cleanNode($child);
+                    while ($child->firstChild) {
+                        $node->insertBefore($child->firstChild, $child);
+                    }
                     $node->removeChild($child);
 
                     continue;
