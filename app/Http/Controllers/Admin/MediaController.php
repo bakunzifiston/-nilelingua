@@ -96,20 +96,24 @@ class MediaController extends Controller
     /** Uploaded files are only ever served as plain files: no scripts, no PHP. */
     private static function protectUploadsFolder(): void
     {
-        $rules = public_path('uploads/.htaccess');
-        if (! is_file($rules)) {
-            File::put($rules, implode("\n", [
-                '# Uploaded media: never run scripts from this folder.',
-                'Options -Indexes',
-                '<FilesMatch "\\.(php|phtml|phar|pl|py|cgi|sh)$">',
-                '    Require all denied',
-                '</FilesMatch>',
-                '<IfModule mod_headers.c>',
-                '    Header set Content-Security-Policy "default-src \'none\'; style-src \'unsafe-inline\'; img-src data:"',
-                '    Header set X-Content-Type-Options "nosniff"',
-                '</IfModule>',
-                '',
-            ]));
+        // Only directives every Apache/LiteSpeed host allows here (no "Options", which some hosts forbid).
+        $rules = implode("\n", [
+            '# Uploaded media: never run scripts from this folder.',
+            '<FilesMatch "\\.(php|phtml|phar|pl|py|cgi|sh)$">',
+            '    Require all denied',
+            '</FilesMatch>',
+            '<IfModule mod_headers.c>',
+            '    <FilesMatch "\\.svg$">',
+            '        Header set Content-Security-Policy "default-src \'none\'; style-src \'unsafe-inline\'; img-src data:"',
+            '    </FilesMatch>',
+            '    Header set X-Content-Type-Options "nosniff"',
+            '</IfModule>',
+            '',
+        ]);
+
+        $file = public_path('uploads/.htaccess');
+        if (! is_file($file) || File::get($file) !== $rules) {
+            File::put($file, $rules);
         }
     }
 
