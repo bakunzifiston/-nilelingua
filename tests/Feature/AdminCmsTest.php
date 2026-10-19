@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\CmsEntry;
+use App\Models\Media;
 use App\Models\ProjectEnquiry;
 use App\Models\User;
 use App\Support\Cms\ContentManager;
@@ -10,6 +11,7 @@ use App\Support\Cms\EditorSchema;
 use App\Support\Cms\SiteContent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -235,5 +237,44 @@ class AdminCmsTest extends TestCase
     {
         $this->get('/no-such-page')->assertNotFound()->assertSee('Page not found');
         $this->get('/fr/no-such-page')->assertNotFound()->assertSee('Page introuvable');
+    }
+
+    public function test_svg_uploads_are_cleaned_before_saving(): void
+    {
+        $svg = '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 120 60" onload="alert(1)">'
+            .'<script>alert(2)</script><style>@import url(https://evil.test/x.css); .a{fill:#0F5C52}</style>'
+            .'<a href="javascript:alert(3)"><rect class="a" width="120" height="60"/></a>'
+            .'<foreignObject><iframe src="https://evil.test"></iframe></foreignObject>'
+            .'<use xlink:href="https://evil.test/sprite.svg#x"/><circle cx="30" cy="30" r="10" fill="#E0A84F"/></svg>';
+
+        $this->actingAs($this->admin)
+            ->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('logo.svg', $svg)])
+            ->assertSessionHasNoErrors();
+
+        $media = Media::latest('id')->firstOrFail();
+        $saved = file_get_contents(public_path($media->path));
+        File::delete(public_path($media->path));
+
+        $this->assertSame('image/svg+xml', $media->mime_type);
+        $this->assertSame([120, 60], [$media->width, $media->height]);
+        $this->assertStringContainsString('<circle', $saved);
+        foreach (['onload', '<script', 'javascript:', '@import', 'foreignObject', 'iframe', 'evil.test'] as $unsafe) {
+            $this->assertStringNotContainsStringIgnoringCase($unsafe, $saved);
+        }
+    }
+
+    public function test_files_that_are_not_images_are_rejected(): void
+    {
+        $this->actingAs($this->admin);
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('fake.svg', 'not an svg')])->assertSessionHasErrors('file');
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('fake.png', '<?php echo 1;')])->assertSessionHasErrors('file');
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->createWithContent('bomb.svg', '<!DOCTYPE svg [<!ENTITY a "aaaa">]><svg xmlns="http://www.w3.org/2000/svg">&a;</svg>')])->assertSessionHasErrors('file');
+        $this->assertSame(0, Media::count());
+
+        // A real PNG is still accepted.
+        $this->post('/admin/media', ['file' => UploadedFile::fake()->image('photo.png', 40, 40)])->assertSessionHasNoErrors();
+        $media = Media::firstOrFail();
+        File::delete(public_path($media->path));
+        $this->assertSame([40, 40], [$media->width, $media->height]);
     }
 }
