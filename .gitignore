@@ -28,3 +28,4 @@ Thumbs.db
 
 # Images uploaded through the admin dashboard
 /public/uploads
+/public/images/uploads

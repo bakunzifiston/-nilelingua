@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 /**
- * Images used in managed content. Files are stored in public/uploads.
+ * Images used in managed content. Files are stored in public/images/uploads.
  */
 class MediaController extends Controller
 {
@@ -62,7 +62,8 @@ class MediaController extends Controller
             return back()->withErrors(['file' => 'Upload a JPG, PNG, WebP, GIF or SVG image.'])->withInput();
         }
 
-        $folder = 'uploads/'.now()->format('Y/m');
+        // Inside public/images: hosts that only forward known asset folders already serve it.
+        $folder = 'images/uploads/'.now()->format('Y/m');
         $name = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'image';
         $name = Str::limit($name, 60, '').'-'.Str::lower(Str::random(6)).'.'.($isSvg ? 'svg' : $file->guessExtension());
 
@@ -111,7 +112,7 @@ class MediaController extends Controller
             '',
         ]);
 
-        $file = public_path('uploads/.htaccess');
+        $file = public_path('images/uploads/.htaccess');
         if (! is_file($file) || File::get($file) !== $rules) {
             File::put($file, $rules);
         }
