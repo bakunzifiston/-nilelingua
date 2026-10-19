@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>Sign in · Nile Lingua Lab admin</title>
-    <link rel="icon" href="{{ \App\Support\VersionedAsset::url('favicon.svg') }}" type="image/svg+xml">
+    @include('partials.favicons')
     <link rel="stylesheet" href="{{ \App\Support\VersionedAsset::url('css/admin.css') }}">
 </head>
 <body>
