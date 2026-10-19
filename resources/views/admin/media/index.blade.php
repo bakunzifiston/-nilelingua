@@ -21,7 +21,7 @@
         <form class="a-card-body a-upload" method="POST" action="{{ route('admin.media.store') }}" enctype="multipart/form-data" novalidate>
             @csrf
             <div class="a-field @error('file') has-error @enderror">
-                <label class="a-label" for="file">Image (JPG, PNG, WebP, GIF or SVG, up to {{ min(5, \App\Http\Controllers\Admin\MediaController::serverUploadLimitMb()) }} MB)</label>
+                <label class="a-label" for="file">Image (JPG, PNG, WebP, GIF or SVG, up to {{ min(\App\Http\Controllers\Admin\MediaController::MAX_KB / 1024, \App\Http\Controllers\Admin\MediaController::serverUploadLimitMb()) }} MB)</label>
                 <input class="a-input" id="file" type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,.svg" required @error('file') aria-invalid="true" aria-describedby="file-error" @enderror>
                 @error('file')<p class="a-error" id="file-error">{{ $message }}</p>@enderror
             </div>

@@ -36,7 +36,7 @@ class SvgSanitizer
 
         $document = new DOMDocument;
         $previous = libxml_use_internal_errors(true);
-        $loaded = $document->loadXML($svg, LIBXML_NONET | LIBXML_NOBLANKS);
+        $loaded = $document->loadXML($svg, LIBXML_NONET | LIBXML_NOBLANKS | LIBXML_PARSEHUGE);
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
 
@@ -54,7 +54,7 @@ class SvgSanitizer
     public static function dimensions(string $svg): array
     {
         $document = new DOMDocument;
-        if (! @$document->loadXML($svg, LIBXML_NONET) || ! $document->documentElement) {
+        if (! @$document->loadXML($svg, LIBXML_NONET | LIBXML_PARSEHUGE) || ! $document->documentElement) {
             return [null, null];
         }
         $root = $document->documentElement;

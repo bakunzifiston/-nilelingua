@@ -17,6 +17,9 @@ use Illuminate\Support\Str;
  */
 class MediaController extends Controller
 {
+    /** Largest image the media library accepts (KB). */
+    public const MAX_KB = 10240;
+
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('q', ''));
@@ -36,12 +39,12 @@ class MediaController extends Controller
     {
         $limit = self::serverUploadLimitMb();
         $data = $request->validate([
-            'file' => ['required', 'file', 'max:5120', 'extensions:jpg,jpeg,png,webp,gif,svg'],
+            'file' => ['required', 'file', 'max:'.self::MAX_KB, 'extensions:jpg,jpeg,png,webp,gif,svg'],
             'alt_en' => ['nullable', 'string', 'max:255'],
             'alt_fr' => ['nullable', 'string', 'max:255'],
         ], [
             'file.extensions' => 'Upload a JPG, PNG, WebP, GIF or SVG image.',
-            'file.max' => 'Images must be 5 MB or smaller.',
+            'file.max' => 'Images must be '.(self::MAX_KB / 1024).' MB or smaller.',
             'file.uploaded' => "The file did not reach the server. It may be larger than the server's upload limit ({$limit} MB), or the connection was interrupted.",
         ]);
 
