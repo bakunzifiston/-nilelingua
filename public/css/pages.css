@@ -640,9 +640,9 @@ a.nll-article-card:hover { transform: translateY(-4px); border-color: color-mix(
 .nll-founder-side { position: sticky; top: 104px; display: grid; gap: 20px; }
 .nll-founder-card { display: flex; padding: 32px 28px; flex-direction: column; align-items: center; border-radius: 20px; color: var(--nll-on-dark); background: radial-gradient(80% 60% at 100% 0%, rgb(73 179 160 / 20%), transparent 70%), var(--nll-navy); box-shadow: var(--nll-shadow-hover); text-align: center; }
 .nll-founder-monogram,
-.nll-founder-photo { display: grid; width: 132px; height: 132px; margin-bottom: 18px; place-items: center; border-radius: 50%; object-fit: cover; }
+.nll-founder-photo { display: grid; width: min(200px, 100%); height: auto; aspect-ratio: 1; margin-bottom: 20px; place-items: center; border-radius: 50%; object-fit: cover; object-position: 50% 30%; }
 .nll-founder-monogram { border: 2px solid var(--nll-gold); color: var(--nll-gold); background: rgb(224 168 79 / 10%); font-family: var(--serif); font-size: 46px; font-style: italic; box-shadow: 0 0 0 8px rgb(224 168 79 / 8%); }
-.nll-founder-photo { border: 2px solid var(--nll-gold); }
+.nll-founder-photo { border: 3px solid var(--nll-gold); background: #FFFFFF; box-shadow: 0 0 0 8px rgb(224 168 79 / 10%), 0 18px 40px -16px rgb(0 0 0 / 55%); }
 .nll-founder-card strong { color: #FFFFFF; font-family: var(--serif); font-size: 24px; font-weight: 600; }
 .nll-founder-card > span { margin-top: 4px; color: var(--nll-gold); font-size: 14px; font-weight: 650; }
 .nll-founder-facts { display: grid; width: 100%; margin: 22px 0 0; padding: 18px 0 0; gap: 10px; border-top: 1px solid var(--nll-dark-line); list-style: none; }
