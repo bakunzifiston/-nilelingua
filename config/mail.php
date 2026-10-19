@@ -110,6 +110,9 @@ return [
     |
     */
 
+    // Where new quote requests from the website are emailed (leave empty to turn it off).
+    'quote_recipient' => env('QUOTE_NOTIFY_EMAIL', 'contact@nilelingua.com'),
+
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),

@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Mail\QuoteRequestReceived;
 use App\Models\ProjectEnquiry;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class SitePagesTest extends TestCase
@@ -128,5 +130,36 @@ class SitePagesTest extends TestCase
         ])->assertRedirect('/contact')->assertSessionHasErrors(['name', 'email', 'message']);
 
         $this->assertSame(0, ProjectEnquiry::count());
+    }
+
+    public function test_quote_request_is_emailed_to_the_team(): void
+    {
+        Mail::fake();
+
+        $this->post('/contact', [
+            'name' => 'Avery Example',
+            'email' => 'avery@example.com',
+            'service' => 'translation',
+            'message' => 'Please translate our report.',
+            'consent' => '1',
+        ])->assertRedirect('/thank-you');
+
+        Mail::assertSent(QuoteRequestReceived::class, function ($mail) {
+            return $mail->hasTo('contact@nilelingua.com')
+                && $mail->hasReplyTo('avery@example.com')
+                && str_contains($mail->render(), 'Please translate our report.');
+        });
+    }
+
+    public function test_quote_request_is_saved_even_if_email_fails(): void
+    {
+        Mail::shouldReceive('to')->andThrow(new \RuntimeException('SMTP down'));
+
+        $this->post('/contact', [
+            'name' => 'Avery Example', 'email' => 'avery@example.com', 'service' => 'translation',
+            'message' => 'Still saved.', 'consent' => '1',
+        ])->assertRedirect('/thank-you');
+
+        $this->assertDatabaseHas('project_enquiries', ['message' => 'Still saved.']);
     }
 }

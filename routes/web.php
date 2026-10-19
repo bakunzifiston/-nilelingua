@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\SiteController;
+use App\Mail\QuoteRequestReceived;
 use App\Models\LinguistApplication;
 use App\Models\NewsletterSubscriber;
 use App\Models\ProjectEnquiry;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -56,7 +58,16 @@ $siteRoutes = function (): void {
         $enquiry['service'] = $form['services'][$enquiry['service']];
         $enquiry['consented_at'] = now();
 
-        ProjectEnquiry::create($enquiry);
+        $saved = ProjectEnquiry::create($enquiry);
+
+        // Notify the team by email. The request is already saved, so a mail problem never loses it.
+        if ($recipient = config('mail.quote_recipient')) {
+            try {
+                Mail::to($recipient)->send(new QuoteRequestReceived($saved));
+            } catch (Throwable $e) {
+                report($e);
+            }
+        }
 
         return redirect('/thank-you')->with('enquiry_submitted', true);
     })->name('contact.submit')->middleware('throttle:contact-form');
