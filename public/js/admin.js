@@ -337,6 +337,62 @@
         }
     });
 
+    // Media upload: refuse files that are too large before sending, and show progress while uploading.
+    $$('form[data-upload-form]').forEach((form) => {
+        const input = $('input[type="file"]', form);
+        const error = $('[data-upload-error]', form);
+        const progress = $('[data-upload-progress]', form);
+        const button = $('button[type="submit"]', form);
+        const max = Number(form.dataset.maxBytes) || 0;
+        const mb = (bytes) => `${(bytes / 1048576).toFixed(1)} MB`;
+        const showError = (message) => {
+            error.textContent = message;
+            error.hidden = !message;
+            input.toggleAttribute('aria-invalid', Boolean(message));
+        };
+        const check = () => {
+            const file = input.files[0];
+            if (!file) return false;
+            if (max && file.size > max) {
+                const hint = /\.svg$/i.test(file.name) ? ' This SVG probably contains a photo: save it as a JPG or WebP instead, which is much smaller.' : ' Make the image smaller (for example 1600 pixels wide, saved as JPG or WebP) and try again.';
+                showError(`This file is ${mb(file.size)}, but the limit is ${form.dataset.maxLabel}.${hint}`);
+                return false;
+            }
+            showError('');
+            return true;
+        };
+        input.addEventListener('change', check);
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (!input.files[0]) { showError('Choose an image to upload.'); return; }
+            if (!check()) return;
+            const request = new XMLHttpRequest();
+            request.open('POST', form.action);
+            request.setRequestHeader('Accept', 'text/html');
+            request.upload.addEventListener('progress', (e) => {
+                if (!e.lengthComputable) return;
+                const percent = Math.round((e.loaded / e.total) * 100);
+                progress.textContent = percent < 100 ? `Uploading… ${percent}% (${mb(e.loaded)} of ${mb(e.total)})` : 'Saving the image…';
+            });
+            // Show the page the server answered with, so its success or error message appears.
+            request.addEventListener('load', () => {
+                if (request.responseURL) window.history.replaceState(null, '', request.responseURL);
+                document.open();
+                document.write(request.responseText);
+                document.close();
+            });
+            request.addEventListener('error', () => {
+                button.disabled = false;
+                progress.hidden = true;
+                showError('The upload was interrupted. Check your internet connection and try again.');
+            });
+            button.disabled = true;
+            progress.hidden = false;
+            progress.textContent = 'Uploading… 0%';
+            request.send(new FormData(form));
+        });
+    });
+
     // New item: suggest an address from the title ---------------------------
     const slugSource = $('[data-slug-source]');
     const slugTarget = $('[data-slug-target]');

@@ -18,12 +18,16 @@
 
     <section class="a-card" aria-labelledby="upload-title">
         <div class="a-card-head"><h2 id="upload-title">Upload an image</h2></div>
-        <form class="a-card-body a-upload" method="POST" action="{{ route('admin.media.store') }}" enctype="multipart/form-data" novalidate>
+        @php
+            $maxMb = min(\App\Http\Controllers\Admin\MediaController::MAX_KB / 1024, \App\Http\Controllers\Admin\MediaController::serverUploadLimitMb());
+        @endphp
+        <form class="a-card-body a-upload" method="POST" action="{{ route('admin.media.store') }}" enctype="multipart/form-data" novalidate data-upload-form data-max-bytes="{{ (int) ($maxMb * 1048576) }}" data-max-label="{{ $maxMb }} MB">
             @csrf
             <div class="a-field @error('file') has-error @enderror">
-                <label class="a-label" for="file">Image (JPG, PNG, WebP, GIF or SVG, up to {{ min(\App\Http\Controllers\Admin\MediaController::MAX_KB / 1024, \App\Http\Controllers\Admin\MediaController::serverUploadLimitMb()) }} MB)</label>
-                <input class="a-input" id="file" type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,.svg" required @error('file') aria-invalid="true" aria-describedby="file-error" @enderror>
-                @error('file')<p class="a-error" id="file-error">{{ $message }}</p>@enderror
+                <label class="a-label" for="file">Image (JPG, PNG, WebP, GIF or SVG, up to {{ $maxMb }} MB)</label>
+                <input class="a-input" id="file" type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,.svg" required aria-describedby="file-error" @error('file') aria-invalid="true" @enderror>
+                <p class="a-error" id="file-error" data-upload-error role="alert" @unless ($errors->has('file')) hidden @endunless>{{ $errors->first('file') }}</p>
+                <p class="a-help" data-upload-progress hidden></p>
             </div>
             <div class="a-field">
                 <label class="a-label" for="alt_en"><span class="a-lang">EN</span> Description</label>
